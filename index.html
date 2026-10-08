@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proyecto Arca</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Colores y medidas base (la "Paleta" del Figma) ---------- */
+  :root {
+    --crema: #f6ede0;
+    --texto: #f1ece3;
+    --verde-suave: #7fb5b0;
+    --fondo-claro: #0a7a99;
+    --fondo-oscuro: #02303d;
+    --panel: rgba(255, 255, 255, 0.07);
+    --borde-vidrio: rgba(255, 255, 255, 0.22);
+    --morado-fondo: #1f1e2e;
+    --morado-panel: #3e3a52;
+    --morado-claro: #8a82a8;
+    --morado-acento: #b8c0f5;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: "Roboto Mono", monospace;
+    color: var(--texto);
+    background: #02303d;
+    line-height: 1.5;
+  }
+
+  /* Cada pantalla ocupa todo el alto de la ventana. Solo se ve la activa. */
+  .pantalla {
+    display: none;
+    min-height: 100vh;
+    padding: 28px clamp(20px, 6vw, 80px) 48px;
+    flex-direction: column;
+    background: radial-gradient(ellipse at 50% 95%, var(--fondo-claro) 0%, #04566d 40%, var(--fondo-oscuro) 100%);
+  }
+  .pantalla.activa { display: flex; }
+
+  /* Pantallas con otro color de fondo */
+  .pantalla.teoria { background: #032c33; }
+  .pantalla.protocolo { background: var(--morado-fondo); }
+
+  /* ---------- Barra superior ---------- */
+  .barra {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+  }
+  .barra .logo { width: 22px; height: 22px; }
+  .barra .acciones { display: flex; align-items: center; gap: 14px; font-size: 12px; }
+  .barra button {
+    background: none; border: 0; color: inherit; font: inherit; cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .barra button:focus-visible, .boton:focus-visible, .lista button:focus-visible,
+  input:focus-visible, a:focus-visible {
+    outline: 2px solid var(--morado-acento);
+    outline-offset: 3px;
+  }
+
+  /* ---------- Piezas que se repiten ---------- */
+  .vidrio {
+    background: var(--panel);
+    border: 1px solid var(--borde-vidrio);
+    border-radius: 28px;
+    backdrop-filter: blur(8px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+
+  .boton {
+    background: var(--crema);
+    color: #10262e;
+    border: 0;
+    border-radius: 999px;
+    padding: 8px 20px;
+    font: 500 13px "Roboto Mono", monospace;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .boton:hover:not(:disabled) { transform: translateY(-1px); }
+  .boton:disabled { opacity: 0.35; cursor: not-allowed; }
+  .boton.contorno {
+    background: transparent;
+    color: var(--morado-acento);
+    border: 1px solid var(--morado-acento);
+    border-radius: 0;
+  }
+  .boton.lleno-morado {
+    background: var(--morado-acento);
+    color: var(--morado-fondo);
+    border-radius: 0;
+  }
+
+  h1.titulo {
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    font-size: clamp(36px, 7vw, 72px);
+    color: var(--crema);
+    text-align: center;
+  }
+  h2 { font-weight: 400; color: var(--verde-suave); letter-spacing: 0.04em; }
+  .tenue { color: var(--verde-suave); font-style: italic; font-weight: 300; }
+
+  /* ---------- 1. Inicio ---------- */
+  .inicio { align-items: stretch; }
+  .centro {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 22px; text-align: center;
+  }
+  .centro .detalle { font-size: 11px; line-height: 1.4; }
+  .centro .boton {
+    border: 1px solid var(--borde-vidrio);
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--crema);
+    letter-spacing: 0.08em;
+    margin-top: 6px;
+  }
+
+  /* ---------- 2. Landing ---------- */
+  .landing .contenido { width: min(100%, 940px); margin: 0 auto; }
+  .landing h1 { margin: 18px 0 48px; }
+  .reporte { padding: 26px 28px 30px; }
+  .reporte .cabecera { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px; }
+  .reporte h2 { font-size: 20px; }
+  .reporte .cabecera span { font-size: 12px; }
+  .reporte p { font-size: 13px; }
+
+  .landing h2.seccion { font-size: 20px; margin: 36px 0 16px; }
+  .tarjetas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .tarjeta { padding: 14px; border-radius: 10px; display: flex; flex-direction: column; gap: 18px; }
+  .tarjeta .fila { display: flex; justify-content: space-between; align-items: flex-start; font-size: 12px; }
+  .tarjeta .boton { width: 100%; }
+  .tarjeta.restringida { background: rgba(120, 100, 190, 0.28); color: #b7a6e6; }
+  .tarjeta.restringida .equis { font-size: 20px; font-weight: 700; }
+
+  /* ---------- 3. Pantallas con menú lateral (anomalías, fauna, teoría) ---------- */
+  .archivos .marco {
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(220px, 300px) 1fr;
+    gap: 16px;
+    width: min(100%, 1080px);
+    margin: 0 auto;
+  }
+  .menu { padding: 26px 18px; }
+  .menu h2 { font-size: 22px; padding: 0 10px; }
+  .menu .nivel { font-size: 11px; padding: 0 10px; }
+  .lista { list-style: none; margin-top: 36px; display: flex; flex-direction: column; gap: 18px; }
+  .lista button {
+    width: 100%; text-align: left; background: none; border: 0; color: var(--texto);
+    font: 400 12px "Roboto Mono", monospace; padding: 12px 14px; border-radius: 999px;
+    cursor: pointer;
+  }
+  .lista button.activo { background: rgba(255, 255, 255, 0.16); font-weight: 700; }
+  .teoria .lista button { border-radius: 4px; }
+  .teoria .lista button.activo { background: none; color: var(--verde-suave); text-decoration: underline; }
+
+  .detalle-archivo {
+    padding: 26px;
+    display: grid;
+    grid-template-columns: 1fr minmax(120px, 180px);
+    gap: 24px;
+    align-content: start;
+  }
+  .detalle-archivo.sin-lateral { grid-template-columns: 1fr; }
+  .detalle-archivo .codigo { font-size: 13px; font-style: italic; color: var(--verde-suave); }
+  .detalle-archivo h3 { font-weight: 400; font-size: 22px; color: var(--verde-suave); margin: 10px 0 18px; }
+  .detalle-archivo p { font-size: 12px; margin-bottom: 18px; text-align: justify; }
+  .sujetos { display: flex; flex-direction: column; gap: 14px; }
+  .sujeto {
+    flex: 1; min-height: 120px;
+    background: rgba(100, 170, 150, 0.35);
+    border-radius: 18px;
+    display: flex; align-items: flex-end; justify-content: flex-end;
+    padding: 10px 14px; font-size: 11px; font-style: italic;
+  }
+  .teoria .sujetos { flex-direction: row; grid-column: 1 / -1; }
+  .teoria .sujeto { min-height: 190px; border-radius: 4px; background: #2a6b6b; }
+  .enlace-extra { margin-top: 6px; }
+
+  /* ---------- 4. Registro de respuestas (ondas) ---------- */
+  .respuestas .panel-ondas {
+    width: min(100%, 940px); margin: 0 auto; flex: 1;
+    padding: 22px 28px 40px;
+    display: flex; flex-direction: column;
+  }
+  .respuestas svg { width: 100%; max-height: 300px; margin: auto 0; }
+  .controles { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; text-align: center; font-size: 14px; }
+  .controles label { display: block; margin-bottom: 14px; }
+  input[type="range"] {
+    -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 6px;
+    background: linear-gradient(to right, #7fb5b0 var(--lleno, 50%), #04222b var(--lleno, 50%));
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--crema); border: 0; cursor: grab;
+    box-shadow: 0 0 0 5px rgba(246, 237, 224, 0.15);
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 26px; height: 26px; border-radius: 50%; background: var(--crema); border: 0; cursor: grab;
+  }
+
+  /* ---------- 5. Registro de empleados ---------- */
+  .empleados .rejilla {
+    width: min(100%, 940px); margin: 0 auto;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px;
+  }
+  .empleado { border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; background: rgba(2, 48, 61, 0.55); border: 1px solid var(--borde-vidrio); }
+  .empleado .foto { height: 110px; background: #70adaa; }
+  .empleado .datos { padding: 20px 18px 20px; text-align: center; font-size: 12px; display: flex; flex-direction: column; gap: 18px; }
+  .empleado .columnas { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .empleado .columnas b { display: block; margin-bottom: 6px; }
+  .empleado .columnas span { color: #b3cfcf; font-weight: 300; }
+  .empleado .boton { text-transform: uppercase; font-size: 11px; align-self: center; }
+
+  /* ---------- 6. Protocolo ARCA (error y terminal) ---------- */
+  .protocolo .marco {
+    flex: 1; width: min(100%, 1000px); margin: 0 auto;
+    background: var(--morado-panel);
+    padding: 22px;
+    display: grid; grid-template-columns: 190px 1fr; gap: 24px;
+  }
+  .protocolo .arbol, .protocolo .error-caja {
+    border: 1px solid var(--morado-claro);
+  }
+  .arbol { padding: 26px 20px; font-size: 11px; line-height: 2.2; }
+  .arbol .sub1 { margin-left: 14px; border-left: 1px dashed var(--morado-claro); padding-left: 12px; }
+  .arbol .sub2 { margin-left: 40px; color: var(--morado-acento); }
+  .error-caja { padding: 26px; display: grid; grid-template-columns: 1fr 230px; gap: 28px; }
+  .mapa { width: 100%; height: 100%; min-height: 260px; }
+  .error-texto { display: flex; flex-direction: column; font-size: 11px; }
+  .error-texto h2 { color: var(--texto); text-align: center; font-size: 17px; margin-bottom: 20px; }
+  .error-texto p { margin-bottom: 18px; }
+  .error-texto .botones { margin-top: auto; display: flex; justify-content: space-between; align-items: center; }
+  .error-texto .botones .boton { font-size: 11px; padding: 6px 18px; }
+  .error-texto .salir { background: none; color: var(--morado-acento); border: 0; padding: 0; }
+
+  .terminal-pantalla { background: var(--morado-fondo); }
+  .terminal {
+    flex: 1; width: min(100%, 780px); margin: 0 auto;
+    color: var(--morado-acento); font-size: 15px; line-height: 1.9; padding-top: 40px;
+    white-space: pre-wrap;
+  }
+  .terminal .cursor { display: inline-block; width: 9px; height: 1em; background: var(--morado-acento); vertical-align: -2px; animation: parpadeo 1s steps(1) infinite; }
+  @keyframes parpadeo { 50% { opacity: 0; } }
+
+  /* ---------- Ventana para ingresar clave ---------- */
+  dialog {
+    margin: auto; padding: 28px; border-radius: 22px; color: var(--texto);
+    background: #04444f; border: 1px solid var(--borde-vidrio); width: min(92vw, 380px);
+    font-family: "Roboto Mono", monospace;
+  }
+  dialog::backdrop { background: rgba(0, 20, 26, 0.7); }
+  dialog h3 { font-weight: 400; margin-bottom: 14px; color: var(--verde-suave); }
+  dialog input[type="password"] {
+    width: 100%; padding: 10px 14px; border-radius: 999px; border: 1px solid var(--borde-vidrio);
+    background: rgba(0, 0, 0, 0.25); color: var(--texto); font: inherit; margin-bottom: 8px;
+  }
+  dialog .mensaje { min-height: 18px; font-size: 12px; color: #f2b8a6; margin-bottom: 12px; }
+  dialog .botones { display: flex; justify-content: flex-end; gap: 10px; }
+
+  /* ---------- Celulares y pantallas pequeñas ---------- */
+  @media (max-width: 860px) {
+    .tarjetas { grid-template-columns: 1fr 1fr; }
+    .archivos .marco { grid-template-columns: 1fr; }
+    .detalle-archivo { grid-template-columns: 1fr; }
+    .sujetos, .teoria .sujetos { flex-direction: row; }
+    .empleados .rejilla { grid-template-columns: 1fr 1fr; }
+    .protocolo .marco { grid-template-columns: 1fr; }
+    .error-caja { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 520px) {
+    .tarjetas, .empleados .rejilla, .controles { grid-template-columns: 1fr; }
+    .sujetos { flex-direction: column; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .terminal .cursor { animation: none; }
+    .boton { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Barra superior: se copia dentro de cada pantalla con JavaScript -->
+<template id="plantillaBarra">
+  <header class="barra">
+    <a href="#inicio" aria-label="Volver al inicio">
+      <svg class="logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 21 L11 3 L21 21"/><path d="M8 21 L12 12 L16 21"/>
+      </svg>
+    </a>
+    <div class="acciones">
+      <button type="button" class="idioma" aria-label="Cambiar idioma"><span class="codigo-idioma">ES</span> <span aria-hidden="true">🇪🇸</span></button>
+      <button type="button" class="accesibilidad" aria-label="Opciones de accesibilidad">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><circle cx="12" cy="7.5" r="1.4" fill="currentColor"/>
+          <path d="M7 10.5 L12 11.5 L17 10.5 M12 11.5 V15 M9.5 19 L12 15 L14.5 19" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+</template>
+
+<!-- ========== 1. INICIO ========== -->
+<section class="pantalla inicio" id="inicio" data-barra>
+  <div class="centro">
+    <h1 class="titulo">PROYECTO ARCA</h1>
+    <p class="detalle">1 Archivo Encontrado<br>"Reporte General"</p>
+    <button class="boton" type="button" data-ir="landing">ABRIR ARCHIVO</button>
+  </div>
+</section>
+
+<!-- ========== 2. LANDING ========== -->
+<section class="pantalla landing" id="landing" data-barra>
+  <div class="contenido">
+    <h1 class="titulo">PROYECTO ARCA</h1>
+
+    <article class="vidrio reporte">
+      <div class="cabecera">
+        <h2>REPORTE GENERAL</h2>
+        <span class="tenue">Acceso Público</span>
+      </div>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </article>
+
+    <h2 class="seccion">ARCHIVOS CLASIFICADOS</h2>
+    <div class="tarjetas">
+      <div class="vidrio tarjeta">
+        <div class="fila"><span>Registro de anomalías</span><span aria-hidden="true">🔓</span></div>
+        <button class="boton" type="button" data-ir="anomalias">Acceder</button>
+      </div>
+      <div class="vidrio tarjeta">
+        <div class="fila"><span>Registros de Empleados</span><span aria-hidden="true">🔒</span></div>
+        <button class="boton" type="button" id="botonClave">Ingresar clave</button>
+      </div>
+      <div class="vidrio tarjeta">
+        <div class="fila"><span>Teoría Clasificada</span><span aria-hidden="true">🔒</span></div>
+        <button class="boton" type="button" data-ir="teoria">Bloqueado</button>
+      </div>
+      <div class="vidrio tarjeta restringida">
+        <div class="fila"><span>PROTOCOLO ARCA</span><span class="equis" aria-hidden="true">X</span></div>
+        <button class="boton" type="button" data-ir="protocolo-error" disabled>RESTRINGIDO</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 3. REGISTRO DE ANOMALÍAS ========== -->
+<section class="pantalla archivos" id="anomalias" data-barra>
+  <div class="marco">
+    <nav class="vidrio menu" aria-label="Archivos de anomalías">
+      <h2>Archivos</h2>
+      <p class="nivel tenue">Confidencialidad Baja</p>
+      <ul class="lista" data-lista="anomalias"></ul>
+    </nav>
+    <article class="vidrio detalle-archivo" data-detalle="anomalias"></article>
+  </div>
+</section>
+
+<!-- ========== 4. REGISTRO DE RESPUESTAS (ondas) ========== -->
+<section class="pantalla respuestas" id="respuestas" data-barra>
+  <div class="vidrio panel-ondas">
+    <p class="tenue">//Sincronización de Frecuencia</p>
+    <svg viewBox="0 0 600 260" role="img" aria-label="Dos ondas que se pueden ajustar con los controles">
+      <defs>
+        <filter id="brillo" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3" result="difuso"/>
+          <feMerge><feMergeNode in="difuso"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <path id="ondaPunteada" fill="none" stroke="#8fd0cb" stroke-width="3" stroke-dasharray="7 8" stroke-linecap="round" filter="url(#brillo)"/>
+      <path id="ondaSolida" fill="none" stroke="#9cc7c2" stroke-width="4" stroke-linecap="round" filter="url(#brillo)"/>
+    </svg>
+    <div class="controles">
+      <div>
+        <label for="amplitud">Amplitud de Onda</label>
+        <input type="range" id="amplitud" min="10" max="100" value="45">
+      </div>
+      <div>
+        <label for="banda">Ancho de Banda</label>
+        <input type="range" id="banda" min="10" max="100" value="85">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 5. ARCHIVOS DE FAUNA ========== -->
+<section class="pantalla archivos" id="fauna" data-barra>
+  <div class="marco">
+    <nav class="vidrio menu" aria-label="Archivos de fauna">
+      <h2>Archivos</h2>
+      <p class="nivel tenue">Confidencialidad Baja</p>
+      <ul class="lista" data-lista="fauna"></ul>
+    </nav>
+    <article class="vidrio detalle-archivo" data-detalle="fauna"></article>
+  </div>
+</section>
+
+<!-- ========== 6. REGISTRO DE EMPLEADOS ========== -->
+<section class="pantalla empleados" id="empleados" data-barra>
+  <div class="rejilla" id="rejillaEmpleados"></div>
+</section>
+
+<!-- ========== 7. TEORÍA CLASIFICADA ========== -->
+<section class="pantalla archivos teoria" id="teoria" data-barra>
+  <div class="marco">
+    <nav class="vidrio menu" aria-label="Teoría clasificada">
+      <h2>Archivos</h2>
+      <p class="nivel tenue">Confidencialidad Media</p>
+      <ul class="lista" data-lista="teoria"></ul>
+    </nav>
+    <article class="vidrio detalle-archivo sin-lateral" data-detalle="teoria"></article>
+  </div>
+</section>
+
+<!-- ========== 8. PROTOCOLO ARCA: ERROR ========== -->
+<section class="pantalla protocolo" id="protocolo-error" data-barra>
+  <div class="marco">
+    <nav class="arbol" aria-label="Ruta actual">
+      <div>PROYECTO ARCA</div>
+      <div class="sub1">PROTOCOLO ARCA
+        <div class="sub2">ERROR</div>
+      </div>
+    </nav>
+    <div class="error-caja">
+      <!-- El mapa roto: piezas que no encajan -->
+      <svg class="mapa" viewBox="0 0 250 330" preserveAspectRatio="none" aria-label="Mapa desarmado">
+        <g fill="#8a82a8" stroke="#3e3a52" stroke-width="4" stroke-linejoin="round">
+          <polygon points="0,0 120,0 120,190 0,190"/>
+          <polygon points="124,0 250,0 250,200 124,200"/>
+          <polygon points="0,194 98,194 0,330"/>
+          <polygon points="102,194 130,194 170,330 102,330"/>
+          <polygon points="134,204 250,204 250,330 174,330"/>
+        </g>
+      </svg>
+      <div class="error-texto">
+        <h2>ERROR</h2>
+        <p>El mapa del protocolo se desarmó y sus piezas no coinciden. Es necesario unirlo de nuevo antes de continuar.</p>
+        <p>Revisa las piezas, vuelve a ordenarlas y confirma para reintentar la conexión con el archivo.</p>
+        <div class="botones">
+          <button class="salir boton" type="button" data-ir="landing">Salir</button>
+          <button class="boton lleno-morado" type="button" data-ir="protocolo-terminal">Continuar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 9. PROTOCOLO ARCA: TERMINAL ========== -->
+<section class="pantalla protocolo terminal-pantalla" id="protocolo-terminal" data-barra>
+  <div class="terminal" id="terminal" aria-live="polite"></div>
+</section>
+
+<!-- Ventana para la clave de empleados -->
+<dialog id="ventanaClave">
+  <h3>Registros de Empleados</h3>
+  <label for="campoClave" style="font-size:12px;display:block;margin-bottom:8px;">Ingresa la clave de acceso</label>
+  <input type="password" id="campoClave" autocomplete="off">
+  <p class="mensaje" id="mensajeClave" role="alert"></p>
+  <div class="botones">
+    <button type="button" class="boton" id="cancelarClave" style="background:transparent;color:var(--texto);border:1px solid var(--borde-vidrio);">Cancelar</button>
+    <button type="button" class="boton" id="enviarClave">Entrar</button>
+  </div>
+</dialog>
+
+<script>
+  // ---------------------------------------------------------------
+  // Contenido de las pantallas con menú lateral
+  // ---------------------------------------------------------------
+  var lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+  var archivos = {
+    anomalias: [
+      { nombre: "Alteración del ciclo natural", codigo: "RA-001", titulo: "Alteración del ciclo natural" },
+      { nombre: "Registro de Respuestas del Entorno", codigo: "RA-002", titulo: "Registro de respuestas del entorno", enlace: "respuestas", textoEnlace: "Sincronizar frecuencia" },
+      { nombre: "Indicio de Patrones Intencionales", codigo: "RA-003", titulo: "Indicio de patrones intencionales" },
+      { nombre: "Archivo de Fauna", codigo: "RA-004", titulo: "Archivo de fauna", enlace: "fauna", textoEnlace: "Abrir archivo de fauna" }
+    ],
+    fauna: [
+      { nombre: "Fauna Alterada", codigo: "AF-001", titulo: "Fauna Alterada" },
+      { nombre: "Mutaciones Recientes", codigo: "AF-002", titulo: "Mutaciones Recientes" },
+      { nombre: "Nuevos Descubrimientos", codigo: "AF-003", titulo: "Nuevos Descubrimientos" }
+    ],
+    teoria: [
+      { nombre: "Hipótesis Aprobadas", codigo: "TC-001", titulo: "Hipótesis Aprobadas" },
+      { nombre: "Clima", codigo: "TC-002", titulo: "Clima" },
+      { nombre: "Fauna", codigo: "TC-003", titulo: "Fauna" },
+      { nombre: "Patrones", codigo: "TC-004", titulo: "Patrones" }
+    ]
+  };
+
+  // Qué archivo está seleccionado en cada pantalla (por defecto, el que se ve en el diseño)
+  var seleccionado = { anomalias: 1, fauna: 1, teoria: 1 };
+
+  function dibujarArchivos(grupo) {
+    var lista = document.querySelector('[data-lista="' + grupo + '"]');
+    var detalle = document.querySelector('[data-detalle="' + grupo + '"]');
+    var elementos = archivos[grupo];
+    var actual = elementos[seleccionado[grupo]];
+
+    // Menú lateral
+    lista.innerHTML = "";
+    elementos.forEach(function (item, posicion) {
+      var li = document.createElement("li");
+      var boton = document.createElement("button");
+      boton.type = "button";
+      boton.textContent = item.nombre;
+      if (posicion === seleccionado[grupo]) {
+        boton.className = "activo";
+        boton.setAttribute("aria-current", "true");
+      }
+      boton.addEventListener("click", function () {
+        seleccionado[grupo] = posicion;
+        dibujarArchivos(grupo);
+      });
+      li.appendChild(boton);
+      lista.appendChild(li);
+    });
+
+    // Contenido a la derecha
+    var parrafos = '<p>' + lorem + '</p>';
+    if (grupo !== "teoria") parrafos += '<p>' + lorem + '</p>';
+    var enlace = "";
+    if (actual.enlace) {
+      enlace = '<button class="boton enlace-extra" type="button" data-ir="' + actual.enlace + '">' + actual.textoEnlace + '</button>';
+    }
+    var sujetos = grupo === "teoria"
+      ? '<div class="sujetos"><div class="sujeto">Sujeto 01</div><div class="sujeto">Sujeto 01</div></div>'
+      : '<div class="sujetos"><div class="sujeto">Sujeto 01</div><div class="sujeto">Sujeto 07</div><div class="sujeto">Sujeto 11</div></div>';
+
+    if (grupo === "teoria") {
+      detalle.innerHTML = '<div><p class="codigo">//' + actual.codigo + '</p><h3>' + actual.titulo + '</h3>' + parrafos + '</div>' + sujetos;
+    } else {
+      detalle.innerHTML = '<div><p class="codigo">//' + actual.codigo + '</p><h3>' + actual.titulo + '</h3>' + parrafos + enlace + '</div>' + sujetos;
+    }
+  }
+
+  // ---------------------------------------------------------------
+  // Registro de empleados: 6 tarjetas iguales
+  // ---------------------------------------------------------------
+  function dibujarEmpleados() {
+    var rejilla = document.getElementById("rejillaEmpleados");
+    var html = "";
+    for (var i = 1; i <= 6; i++) {
+      html += '<article class="empleado">' +
+        '<div class="foto" role="img" aria-label="Foto del científico"></div>' +
+        '<div class="datos">' +
+          '<span>Científico 1</span>' +
+          '<div class="columnas">' +
+            '<div><b>Ocupación</b><span>Análisis de Flora</span></div>' +
+            '<div><b>Permanencia</b><span>8 años</span></div>' +
+          '</div>' +
+          '<button class="boton" type="button">ACCEDER AL REGISTRO</button>' +
+        '</div>' +
+      '</article>';
+    }
+    rejilla.innerHTML = html;
+  }
+
+  // ---------------------------------------------------------------
+  // Ondas: dos curvas que cambian con los controles
+  // ---------------------------------------------------------------
+  var campoAmplitud = document.getElementById("amplitud");
+  var campoBanda = document.getElementById("banda");
+  var ondaSolida = document.getElementById("ondaSolida");
+  var ondaPunteada = document.getElementById("ondaPunteada");
+
+  function crearOnda(amplitud, frecuencia, fase, desfase) {
+    var puntos = [];
+    var inicio = 70, fin = 530, centroY = 140;
+    for (var x = inicio; x <= fin; x += 4) {
+      var avance = (x - inicio) / (fin - inicio);
+      // La amplitud sube y baja un poco para que no sea una onda perfecta
+      var variacion = 0.65 + 0.35 * Math.sin(avance * 9 + desfase);
+      var y = centroY - Math.sin(avance * frecuencia + fase) * amplitud * variacion;
+      puntos.push((x === inicio ? "M" : "L") + x + " " + y.toFixed(1));
+    }
+    return puntos.join(" ");
+  }
+
+  function pintarRelleno(campo) {
+    var porcentaje = (campo.value - campo.min) / (campo.max - campo.min) * 100;
+    campo.style.setProperty("--lleno", porcentaje + "%");
+  }
+
+  function actualizarOndas() {
+    var amplitud = Number(campoAmplitud.value) * 1.1;
+    var frecuencia = 8 + Number(campoBanda.value) / 100 * 36; // más "banda" = más ondas
+    ondaSolida.setAttribute("d", crearOnda(amplitud * 0.75, frecuencia, 0.4, 1.2));
+    ondaPunteada.setAttribute("d", crearOnda(amplitud, frecuencia, 0, 0));
+    pintarRelleno(campoAmplitud);
+    pintarRelleno(campoBanda);
+  }
+  campoAmplitud.addEventListener("input", actualizarOndas);
+  campoBanda.addEventListener("input", actualizarOndas);
+
+  // ---------------------------------------------------------------
+  // Terminal del protocolo: escribe las líneas una por una
+  // ---------------------------------------------------------------
+  var lineasTerminal = [
+    "> iniciando protocolo ARCA...",
+    "> verificando integridad del mapa... [FALLO]",
+    "> reconstruyendo piezas: 5 / 5",
+    "> enlace con archivo restablecido",
+    "> bienvenida/o al Proyecto Arca"
+  ];
+  var temporizadorTerminal = null;
+
+  function escribirTerminal() {
+    var terminal = document.getElementById("terminal");
+    clearTimeout(temporizadorTerminal);
+    terminal.textContent = "";
+    var linea = 0, letra = 0;
+    var textoCompleto = "";
+
+    function siguiente() {
+      if (linea >= lineasTerminal.length) {
+        terminal.innerHTML = textoCompleto + '<span class="cursor"></span>';
+        return;
+      }
+      var actual = lineasTerminal[linea];
+      letra++;
+      terminal.innerHTML = textoCompleto + actual.slice(0, letra) + '<span class="cursor"></span>';
+      if (letra >= actual.length) {
+        textoCompleto += actual + "\n";
+        linea++;
+        letra = 0;
+        temporizadorTerminal = setTimeout(siguiente, 350);
+      } else {
+        temporizadorTerminal = setTimeout(siguiente, 28);
+      }
+    }
+    siguiente();
+  }
+
+  // ---------------------------------------------------------------
+  // Navegación entre pantallas (usa el # de la dirección)
+  // ---------------------------------------------------------------
+  function mostrarPantalla(nombre) {
+    var destino = document.getElementById(nombre) ? nombre : "inicio";
+    document.querySelectorAll(".pantalla").forEach(function (pantalla) {
+      pantalla.classList.toggle("activa", pantalla.id === destino);
+    });
+    window.scrollTo(0, 0);
+    if (destino === "protocolo-terminal") escribirTerminal();
+    if (destino === "respuestas") actualizarOndas();
+  }
+
+  function irA(nombre) {
+    location.hash = nombre;
+  }
+
+  window.addEventListener("hashchange", function () {
+    mostrarPantalla(location.hash.replace("#", ""));
+  });
+
+  // Cualquier botón con data-ir lleva a esa pantalla (también los que se crean después)
+  document.addEventListener("click", function (evento) {
+    var boton = evento.target.closest("[data-ir]");
+    if (boton && !boton.disabled) irA(boton.getAttribute("data-ir"));
+  });
+
+  // ---------------------------------------------------------------
+  // Barra superior y selector de idioma
+  // ---------------------------------------------------------------
+  var plantillaBarra = document.getElementById("plantillaBarra");
+  document.querySelectorAll("[data-barra]").forEach(function (pantalla) {
+    pantalla.insertBefore(plantillaBarra.content.cloneNode(true), pantalla.firstChild);
+  });
+
+  var idiomaActual = "ES";
+  document.querySelectorAll(".idioma").forEach(function (boton) {
+    boton.addEventListener("click", function () {
+      idiomaActual = idiomaActual === "ES" ? "EN" : "ES";
+      document.querySelectorAll(".codigo-idioma").forEach(function (etiqueta) {
+        etiqueta.textContent = idiomaActual;
+      });
+      document.documentElement.lang = idiomaActual.toLowerCase();
+      // Aquí se conectaría el diccionario de traducciones del proyecto
+    });
+  });
+
+  // ---------------------------------------------------------------
+  // Ventana de clave para "Registros de Empleados"
+  // ---------------------------------------------------------------
+  var claveCorrecta = "arca"; // clave de prueba: cámbiala por la tuya
+  var ventana = document.getElementById("ventanaClave");
+  var campoClave = document.getElementById("campoClave");
+  var mensajeClave = document.getElementById("mensajeClave");
+
+  document.getElementById("botonClave").addEventListener("click", function () {
+    campoClave.value = "";
+    mensajeClave.textContent = "";
+    ventana.showModal();
+    campoClave.focus();
+  });
+  document.getElementById("cancelarClave").addEventListener("click", function () {
+    ventana.close();
+  });
+  function revisarClave() {
+    if (campoClave.value.trim().toLowerCase() === claveCorrecta) {
+      ventana.close();
+      irA("empleados");
+    } else {
+      mensajeClave.textContent = "Clave incorrecta. Inténtalo de nuevo.";
+    }
+  }
+  document.getElementById("enviarClave").addEventListener("click", revisarClave);
+  campoClave.addEventListener("keydown", function (evento) {
+    if (evento.key === "Enter") revisarClave();
+  });
+
+  // ---------------------------------------------------------------
+  // Arranque
+  // ---------------------------------------------------------------
+  dibujarArchivos("anomalias");
+  dibujarArchivos("fauna");
+  dibujarArchivos("teoria");
+  dibujarEmpleados();
+  mostrarPantalla(location.hash.replace("#", "") || "inicio");
+</script>
+</body>
+</html>
