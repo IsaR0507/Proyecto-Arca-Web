@@ -1,0 +1,292 @@
+/* Proyecto Arca - estilos */
+
+/* ---------- Colores y medidas base (la "Paleta" del Figma) ---------- */
+:root {
+  --crema: #f6ede0;
+  --texto: #f1ece3;
+  --verde-suave: #7fb5b0;
+  --fondo-claro: #0a7a99;
+  --fondo-oscuro: #02303d;
+  --panel: rgba(255, 255, 255, 0.07);
+  --borde-vidrio: rgba(255, 255, 255, 0.22);
+  --morado-fondo: #1f1e2e;
+  --morado-panel: #3e3a52;
+  --morado-claro: #8a82a8;
+  --morado-acento: #b8c0f5;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; }
+
+body {
+  font-family: "Roboto Mono", monospace;
+  color: var(--texto);
+  background: #02303d;
+  line-height: 1.5;
+}
+
+/* Cada pantalla ocupa todo el alto de la ventana. Solo se ve la activa. */
+.pantalla {
+  display: none;
+  min-height: 100vh;
+  padding: 28px clamp(20px, 6vw, 80px) 48px;
+  flex-direction: column;
+  background: radial-gradient(ellipse at 50% 95%, var(--fondo-claro) 0%, #04566d 40%, var(--fondo-oscuro) 100%);
+}
+.pantalla.activa { display: flex; }
+
+/* Pantallas con otro color de fondo */
+.pantalla.teoria { background: #032c33; }
+.pantalla.protocolo { background: var(--morado-fondo); }
+
+/* ---------- Barra superior ---------- */
+
+.barrainicio {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+
+.barrainicio .accionesinicio {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  font-size: 12px;
+}
+
+.barrainicio button {
+  background: none; border: 0; color: inherit; font: inherit; cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+}
+
+.barrainicio button:focus-visible, .boton:focus-visible, .lista button:focus-visible,
+input:focus-visible, a:focus-visible {
+  outline: 2px solid var(--morado-acento);
+  outline-offset: 3px;
+}
+
+/* ---------- Piezas que se repiten ---------- */
+.vidrio {
+  background: var(--panel);
+  border: 1px solid var(--borde-vidrio);
+  border-radius: 28px;
+  backdrop-filter: blur(8px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.boton {
+  background: var(--crema);
+  color: #10262e;
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 20px;
+  font: 500 13px "Roboto Mono", monospace;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.boton:hover:not(:disabled) { transform: translateY(-1px); }
+.boton:disabled { opacity: 0.35; cursor: not-allowed; }
+.boton.contorno {
+  background: transparent;
+  color: var(--morado-acento);
+  border: 1px solid var(--morado-acento);
+  border-radius: 0;
+}
+.boton.lleno-morado {
+  background: var(--morado-acento);
+  color: var(--morado-fondo);
+  border-radius: 0;
+}
+
+h1.titulo {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-size: clamp(36px, 7vw, 72px);
+  color: var(--crema);
+  text-align: center;
+}
+h2 { font-weight: 400; color: var(--verde-suave); letter-spacing: 0.04em; }
+.tenue { color: var(--verde-suave); font-style: italic; font-weight: 300; }
+
+/* ---------- 1. Inicio ---------- */
+.inicio { align-items: stretch; }
+
+.centro {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 22px; text-align: center;
+}
+.centro .detalle { font-size: 11px; line-height: 1.4; }
+.centro .boton {
+  border: 1px solid var(--borde-vidrio);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--crema);
+  letter-spacing: 0.08em;
+  margin-top: 6px;
+}
+
+/* ---------- 2. Landing ---------- */
+.landing .contenido { width: min(100%, 940px); margin: 0 auto; }
+.landing h1 { margin: 18px 0 48px; }
+.reporte { padding: 26px 28px 30px; }
+.reporte .cabecera { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px; }
+.reporte h2 { font-size: 20px; }
+.reporte .cabecera span { font-size: 12px; }
+.reporte p { font-size: 13px; }
+
+.landing h2.seccion { font-size: 20px; margin: 36px 0 16px; }
+.tarjetas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.tarjeta { padding: 14px; border-radius: 10px; display: flex; flex-direction: column; gap: 18px; }
+.tarjeta .fila { display: flex; justify-content: space-between; align-items: flex-start; font-size: 12px; }
+.tarjeta .boton { width: 100%; }
+.tarjeta.restringida { background: rgba(120, 100, 190, 0.28); color: #b7a6e6; }
+.tarjeta.restringida .equis { font-size: 20px; font-weight: 700; }
+
+/* ---------- 3. Pantallas con menú lateral (anomalías, fauna, teoría) ---------- */
+.archivos .marco {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) 1fr;
+  gap: 16px;
+  width: min(100%, 1080px);
+  margin: 0 auto;
+}
+.menu { padding: 26px 18px; }
+.menu h2 { font-size: 22px; padding: 0 10px; }
+.menu .nivel { font-size: 11px; padding: 0 10px; }
+.lista { list-style: none; margin-top: 36px; display: flex; flex-direction: column; gap: 18px; }
+.lista button {
+  width: 100%; text-align: left; background: none; border: 0; color: var(--texto);
+  font: 400 12px "Roboto Mono", monospace; padding: 12px 14px; border-radius: 999px;
+  cursor: pointer;
+}
+.lista button.activo { background: rgba(255, 255, 255, 0.16); font-weight: 700; }
+.teoria .lista button { border-radius: 4px; }
+.teoria .lista button.activo { background: none; color: var(--verde-suave); text-decoration: underline; }
+
+.detalle-archivo {
+  padding: 26px;
+  display: grid;
+  grid-template-columns: 1fr minmax(120px, 180px);
+  gap: 24px;
+  align-content: start;
+}
+.detalle-archivo.sin-lateral { grid-template-columns: 1fr; }
+.detalle-archivo .codigo { font-size: 13px; font-style: italic; color: var(--verde-suave); }
+.detalle-archivo h3 { font-weight: 400; font-size: 22px; color: var(--verde-suave); margin: 10px 0 18px; }
+.detalle-archivo p { font-size: 12px; margin-bottom: 18px; text-align: justify; }
+.sujetos { display: flex; flex-direction: column; gap: 14px; }
+.sujeto {
+  flex: 1; min-height: 120px;
+  background: rgba(100, 170, 150, 0.35);
+  border-radius: 18px;
+  display: flex; align-items: flex-end; justify-content: flex-end;
+  padding: 10px 14px; font-size: 11px; font-style: italic;
+}
+.teoria .sujetos { flex-direction: row; grid-column: 1 / -1; }
+.teoria .sujeto { min-height: 190px; border-radius: 4px; background: #2a6b6b; }
+.enlace-extra { margin-top: 6px; }
+
+/* ---------- 4. Registro de respuestas (ondas) ---------- */
+.respuestas .panel-ondas {
+  width: min(100%, 940px); margin: 0 auto; flex: 1;
+  padding: 22px 28px 40px;
+  display: flex; flex-direction: column;
+}
+.respuestas svg { width: 100%; max-height: 300px; margin: auto 0; }
+.controles { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; text-align: center; font-size: 14px; }
+.controles label { display: block; margin-bottom: 14px; }
+input[type="range"] {
+  -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 6px;
+  background: linear-gradient(to right, #7fb5b0 var(--lleno, 50%), #04222b var(--lleno, 50%));
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--crema); border: 0; cursor: grab;
+  box-shadow: 0 0 0 5px rgba(246, 237, 224, 0.15);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 26px; height: 26px; border-radius: 50%; background: var(--crema); border: 0; cursor: grab;
+}
+
+/* ---------- 5. Registro de empleados ---------- */
+.empleados .rejilla {
+  width: min(100%, 940px); margin: 0 auto;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px;
+}
+.empleado { border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; background: rgba(2, 48, 61, 0.55); border: 1px solid var(--borde-vidrio); }
+.empleado .foto { height: 110px; background: #70adaa; }
+.empleado .datos { padding: 20px 18px 20px; text-align: center; font-size: 12px; display: flex; flex-direction: column; gap: 18px; }
+.empleado .columnas { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.empleado .columnas b { display: block; margin-bottom: 6px; }
+.empleado .columnas span { color: #b3cfcf; font-weight: 300; }
+.empleado .boton { text-transform: uppercase; font-size: 11px; align-self: center; }
+
+/* ---------- 6. Protocolo ARCA (error y terminal) ---------- */
+.protocolo .marco {
+  flex: 1; width: min(100%, 1000px); margin: 0 auto;
+  background: var(--morado-panel);
+  padding: 22px;
+  display: grid; grid-template-columns: 190px 1fr; gap: 24px;
+}
+.protocolo .arbol, .protocolo .error-caja {
+  border: 1px solid var(--morado-claro);
+}
+.arbol { padding: 26px 20px; font-size: 11px; line-height: 2.2; }
+.arbol .sub1 { margin-left: 14px; border-left: 1px dashed var(--morado-claro); padding-left: 12px; }
+.arbol .sub2 { margin-left: 40px; color: var(--morado-acento); }
+.error-caja { padding: 26px; display: grid; grid-template-columns: 1fr 230px; gap: 28px; }
+.mapa { width: 100%; height: 100%; min-height: 260px; }
+.error-texto { display: flex; flex-direction: column; font-size: 11px; }
+.error-texto h2 { color: var(--texto); text-align: center; font-size: 17px; margin-bottom: 20px; }
+.error-texto p { margin-bottom: 18px; }
+.error-texto .botones { margin-top: auto; display: flex; justify-content: space-between; align-items: center; }
+.error-texto .botones .boton { font-size: 11px; padding: 6px 18px; }
+.error-texto .salir { background: none; color: var(--morado-acento); border: 0; padding: 0; }
+
+.terminal-pantalla { background: var(--morado-fondo); }
+.terminal {
+  flex: 1; width: min(100%, 780px); margin: 0 auto;
+  color: var(--morado-acento); font-size: 15px; line-height: 1.9; padding-top: 40px;
+  white-space: pre-wrap;
+}
+.terminal .cursor { display: inline-block; width: 9px; height: 1em; background: var(--morado-acento); vertical-align: -2px; animation: parpadeo 1s steps(1) infinite; }
+@keyframes parpadeo { 50% { opacity: 0; } }
+
+/* ---------- Ventana para ingresar clave ---------- */
+dialog {
+  margin: auto; padding: 28px; border-radius: 22px; color: var(--texto);
+  background: #04444f; border: 1px solid var(--borde-vidrio); width: min(92vw, 380px);
+  font-family: "Roboto Mono", monospace;
+}
+dialog::backdrop { background: rgba(0, 20, 26, 0.7); }
+dialog h3 { font-weight: 400; margin-bottom: 14px; color: var(--verde-suave); }
+dialog input[type="password"] {
+  width: 100%; padding: 10px 14px; border-radius: 999px; border: 1px solid var(--borde-vidrio);
+  background: rgba(0, 0, 0, 0.25); color: var(--texto); font: inherit; margin-bottom: 8px;
+}
+dialog .mensaje { min-height: 18px; font-size: 12px; color: #f2b8a6; margin-bottom: 12px; }
+dialog .botones { display: flex; justify-content: flex-end; gap: 10px; }
+
+/* ---------- Celulares y pantallas pequeñas ---------- */
+@media (max-width: 860px) {
+  .tarjetas { grid-template-columns: 1fr 1fr; }
+  .archivos .marco { grid-template-columns: 1fr; }
+  .detalle-archivo { grid-template-columns: 1fr; }
+  .sujetos, .teoria .sujetos { flex-direction: row; }
+  .empleados .rejilla { grid-template-columns: 1fr 1fr; }
+  .protocolo .marco { grid-template-columns: 1fr; }
+  .error-caja { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  .tarjetas, .empleados .rejilla, .controles { grid-template-columns: 1fr; }
+  .sujetos { flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .terminal .cursor { animation: none; }
+  .boton { transition: none; }
+}
