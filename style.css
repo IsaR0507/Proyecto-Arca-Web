@@ -1,0 +1,571 @@
+<<<<<<< Updated upstream
+=======
+/* Proyecto Arca - estilos */
+
+/* ---------- Colores y medidas base (la "Paleta" del Figma) ---------- */
+:root {
+  --crema: #f6ede0;
+  --texto: #f1ece3;
+  --verde-suave: #7fb5b0;
+  --fondo-claro: #0a7a99;
+  --fondo-oscuro: #02303d;
+  --panel: rgba(255, 255, 255, 0.07);
+  --borde-vidrio: rgba(255, 255, 255, 0.22);
+  --morado-fondo: #1f1e2e;
+  --morado-panel: #3e3a52;
+  --morado-claro: #8a82a8;
+  --morado-acento: #b8c0f5;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; }
+
+body {
+  font-family: "Roboto Mono", monospace;
+  color: var(--texto);
+  background: #02303d;
+  line-height: 1.5;
+}
+
+/* Cada pantalla ocupa todo el alto de la ventana. Solo se ve la activa. */
+.pantalla {
+  display: none;
+  min-height: 100vh;
+  padding: 28px clamp(20px, 6vw, 80px) 48px;
+  flex-direction: column;
+  background: radial-gradient(ellipse at 50% 95%, var(--fondo-claro) 0%, #04566d 40%, var(--fondo-oscuro) 100%);
+}
+.pantalla.activa { display: flex; }
+
+/* Pantallas con otro color de fondo */
+.pantalla.teoria { background: #032c33; }
+.pantalla.protocolo { background: var(--morado-fondo); }
+
+/* ---------- Barra superior ---------- */
+
+.barrainicio {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+
+.barrainicio .accionesinicio {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.75rem;
+}
+
+.barrainicio button {
+  background: none; border: 0; color: inherit; font: inherit; cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+}
+
+.barrainicio button:focus-visible, .boton:focus-visible, .lista button:focus-visible,
+input:focus-visible, a:focus-visible {
+  outline: 2px solid var(--morado-acento);
+  outline-offset: 3px;
+}
+
+.barrainicio2 {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin-bottom: 28px;
+}
+
+.barrainicio2 .accionesinicio2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.75rem;
+}
+
+.barrainicio2 button {
+  background: none; border: 0; color: inherit; font: inherit; cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+}
+
+/* ---------- Piezas que se repiten ---------- */
+.vidrio {
+  background: var(--panel);
+  border: 1px solid var(--borde-vidrio);
+  border-radius: 28px;
+  backdrop-filter: blur(8px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.boton {
+  background: var(--crema);
+  color: #10262e;
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 20px;
+  font: 500 13px "Roboto Mono", monospace;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.boton:hover:not(:disabled) { transform: translateY(-1px); }
+.boton:disabled { opacity: 0.35; cursor: not-allowed; }
+.boton.contorno {
+  background: transparent;
+  color: var(--morado-acento);
+  border: 1px solid var(--morado-acento);
+  border-radius: 0;
+}
+.boton.lleno-morado {
+  background: var(--morado-acento);
+  color: var(--morado-fondo);
+  border-radius: 0;
+}
+
+h1.titulo {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-size: clamp(36px, 7vw, 72px);
+  color: var(--crema);
+  text-align: center;
+}
+h2 { font-weight: 400; color: var(--verde-suave); letter-spacing: 0.04em; }
+.tenue { color: var(--verde-suave); font-style: italic; font-weight: 300; }
+
+/* ---------- 1. Inicio ---------- */
+.inicio { align-items: stretch; }
+
+.centro {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 22px; text-align: center;
+}
+.centro .detalle { font-size: 11px; line-height: 1.4; }
+.centro .boton {
+  border: 1px solid var(--borde-vidrio);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--crema);
+  letter-spacing: 0.08em;
+  margin-top: 6px;
+}
+
+/* ---------- 2. Landing ---------- */
+.landing .contenido { width: min(100%, 940px); margin: 0 auto; }
+.landing h1 { margin: 18px 0 48px; }
+.reporte { padding: 26px 28px 30px; }
+.reporte .cabecera { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px; }
+.reporte h2 { font-size: 20px; }
+.reporte .cabecera span { font-size: 12px; }
+.reporte p { font-size: 13px; }
+
+.landing h2.seccion { font-size: 20px; margin: 36px 0 16px; }
+.tarjetas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.tarjeta { padding: 14px; border-radius: 10px; display: flex; flex-direction: column; gap: 18px; }
+.tarjeta .fila { display: flex; justify-content: space-between; align-items: flex-start; font-size: 0.75rem; }
+.tarjeta .boton { width: 100%; }
+.tarjeta.restringida { background: rgba(120, 100, 190, 0.28); color: #b7a6e6; }
+.tarjeta.restringida .equis { font-size: 1.25rem; font-weight: 700; }
+
+/* ---------- 3. Pantallas con menú lateral (anomalías, fauna, teoría) ---------- */
+.archivos .marco {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) 1fr;
+  gap: 16px;
+  width: min(100%, 1080px);
+  margin: 0 auto;
+}
+.menu { padding: 26px 18px; }
+.menu h2 { font-size: 22px; padding: 0 10px; }
+.menu .nivel { font-size: 11px; padding: 0 10px; }
+.lista { list-style: none; margin-top: 36px; display: flex; flex-direction: column; gap: 18px; }
+.lista button {
+  width: 100%; text-align: left; background: none; border: 0; color: var(--texto);
+  font: 400 12px "Roboto Mono", monospace; padding: 12px 14px; border-radius: 999px;
+  cursor: pointer;
+}
+.lista button.activo { background: rgba(255, 255, 255, 0.16); font-weight: 700; }
+.teoria .lista button { border-radius: 4px; }
+.teoria .lista button.activo { background: none; color: var(--verde-suave); text-decoration: underline; }
+
+.detalle-archivo {
+  padding: 26px;
+  display: grid;
+  grid-template-columns: 1fr minmax(120px, 180px);
+  gap: 24px;
+  align-content: start;
+}
+.detalle-archivo.sin-lateral { grid-template-columns: 1fr; }
+.detalle-archivo .codigo { font-size: 13px; font-style: italic; color: var(--verde-suave); }
+.detalle-archivo h3 { font-weight: 400; font-size: 22px; color: var(--verde-suave); margin: 10px 0 18px; }
+.detalle-archivo p { font-size: 12px; margin-bottom: 18px; text-align: justify; }
+.sujetos { display: flex; flex-direction: column; gap: 28px; margin-top: 40px;}
+.sujeto {
+  flex: 1; min-height: 7.5rem;
+  background: rgba(100, 170, 150, 0.35);
+  border-radius: 18px;
+  display: flex; align-items: flex-end; justify-content: flex-end;
+  padding: 10px 14px; font-size: 11px; font-style: italic;
+}
+.sujeto--foto {
+  cursor: zoom-in;
+  border: 0;               /* quita el borde que los botones traen por defecto */
+  color: inherit;
+  font-family: inherit;
+}
+.sujeto img { transition: transform 0.35s ease; }
+.sujeto--foto:hover img,
+.sujeto--foto:focus-visible img { transform: scale(1.1); }  
+
+@media (prefers-reduced-motion: reduce) {
+  .sujeto img { transition: none; }
+}
+.teoria .sujetos { flex-direction: row; grid-column: 1 / -1; }
+.teoria .sujeto { min-height: 11.875rem; border-radius: 4px; background: #2a6b6b; }
+.enlace-extra { margin-top: 6px; }
+
+/* ---------- 4. Registro de respuestas (ondas) ---------- */
+.respuestas .panel-ondas {
+  width: min(100%, 940px); margin: 0 auto; flex: 1;
+  padding: 22px 28px 40px;
+  display: flex; flex-direction: column;
+}
+.respuestas svg { width: 100%; max-height: 18.75rem; margin: auto 0; }
+.controles { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; text-align: center; font-size: 14px; }
+.controles label { display: block; margin-bottom: 14px; }
+input[type="range"] {
+  -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 6px;
+  background: linear-gradient(to right, #7fb5b0 var(--lleno, 50%), #04222b var(--lleno, 50%));
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--crema); border: 0; cursor: grab;
+  box-shadow: 0 0 0 5px rgba(246, 237, 224, 0.15);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 26px; height: 26px; border-radius: 50%; background: var(--crema); border: 0; cursor: grab;
+}
+
+/* ---------- 5. Registro de empleados ---------- */
+.empleados .rejilla {
+  width: min(100%, 940px); margin: 0 auto;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px;
+}
+.empleado { border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; background: rgba(2, 48, 61, 0.55); border: 1px solid var(--borde-vidrio); }
+.empleado .foto {
+  width: 6rem; height: 6rem;
+  margin: 24px auto 0;          /* lo centra y lo separa del borde */
+  border-radius: 50%;
+  border: 2px solid var(--verde-suave);
+  background: rgba(127, 181, 176, 0.15);
+  overflow: hidden;
+  display: grid; place-items: center;
+  font-size: 1.5rem; font-weight: 700; color: var(--crema);
+}
+.empleado .foto img { width: 100%; height: 100%; object-fit: cover; }
+.empleado .datos { flex: 1; padding: 20px 18px 20px; text-align: center; font-size: 12px; display: flex; flex-direction: column; gap: 18px; }
+.empleado .columnas { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.empleado .columnas b { display: block; margin-bottom: 6px; }
+.empleado .columnas span { color: #b3cfcf; font-weight: 300; }
+.empleado .boton { text-transform: uppercase; font-size: 11px; align-self: center; margin-top: auto; }
+
+/* Tarjetas con expediente restringido */
+.empleado.empleado-tachado {
+  position: relative;
+  overflow: hidden;
+  border-color: var(--borde-vidrio);
+  background: var(--fondo-oscuro);
+}
+
+/* Reduce ligeramente la intensidad de los datos */
+.empleado.empleado-tachado .datos {
+  opacity: 0.72;
+}
+
+/* Nombre realmente tachado */
+.empleado.empleado-tachado .nombre-empleado {
+  position: relative;
+  color: var(--verde-suave);
+  text-decoration: line-through;
+  text-decoration-color: var(--crema);
+  text-decoration-thickness: 2px;
+}
+
+/* Sello de acceso restringido */
+.empleado.empleado-tachado .sello-restringido {
+  display: inline-block;
+  padding: 6px 10px;
+  border: 1px solid var(--verde-suave);
+  border-radius: 3px;
+
+  color: var(--crema);
+  background: rgba(2, 48, 61, 0.9);
+
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+/* Botón bloqueado */
+.empleado.empleado-tachado .boton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  color: var(--fondo-oscuro);
+  background: var(--verde-suave);
+  border-color: var(--verde-suave);
+  box-shadow: none;
+}
+
+
+/* ---------- 6. Protocolo ARCA (error y terminal) ---------- */
+.protocolo .marco {
+  flex: 1; width: min(100%, 1000px); margin: 0 auto;
+  background: var(--morado-panel);
+  padding: 22px;
+  display: grid; grid-template-columns: 190px 1fr; gap: 24px;
+}
+.protocolo .arbol, .protocolo .error-caja {
+  border: 1px solid var(--morado-claro);
+}
+.arbol { padding: 26px 20px; font-size: 11px; line-height: 2.2; }
+.arbol .sub1 { margin-left: 14px; border-left: 1px dashed var(--morado-claro); padding-left: 12px; }
+.arbol .sub2 { margin-left: 40px; color: var(--morado-acento); }
+.error-caja { padding: 26px; display: grid; grid-template-columns: 1fr 230px; gap: 28px; }
+.mapa { width: 100%; height: 100%; min-height: 16.25rem; }
+.error-texto { display: flex; flex-direction: column; font-size: 11px; }
+.error-texto h2 { color: var(--texto); text-align: center; font-size: 17px; margin-bottom: 20px; }
+.error-texto p { margin-bottom: 18px; }
+.error-texto .botones { margin-top: auto; display: flex; justify-content: space-between; align-items: center; }
+.error-texto .botones .boton { font-size: 11px; padding: 6px 18px; }
+.error-texto .salir { background: none; color: var(--morado-acento); border: 0; padding: 0; }
+
+.terminal-pantalla { background: var(--morado-fondo); }
+.terminal {
+  flex: 1; width: min(100%, 780px); margin: 0 auto;
+  color: var(--morado-acento); font-size: 15px; line-height: 1.9; padding-top: 40px;
+  white-space: pre-wrap;
+}
+.terminal .cursor { display: inline-block; width: 9px; height: 1em; background: var(--morado-acento); vertical-align: -2px; animation: parpadeo 1s steps(1) infinite; }
+@keyframes parpadeo { 50% { opacity: 0; } }
+
+/* ---------- Ventana para ingresar clave ---------- */
+dialog {
+  margin: auto; padding: 28px; border-radius: 22px; color: var(--texto);
+  background: #04444f; border: 1px solid var(--borde-vidrio); width: min(92vw, 380px);
+  font-family: "Roboto Mono", monospace;
+}
+dialog::backdrop { background: rgba(0, 20, 26, 0.7); }
+dialog h3 { font-weight: 400; margin-bottom: 14px; color: var(--verde-suave); }
+dialog input[type="password"], dialog input[type="text"] {
+  width: 100%; padding: 10px 14px; border-radius: 999px; border: 1px solid var(--borde-vidrio);
+  background: rgba(0, 0, 0, 0.25); color: var(--texto); font: inherit; margin-bottom: 8px;
+}
+dialog .mensaje { min-height: 18px; font-size: 12px; color: #f2b8a6; margin-bottom: 12px; }
+dialog .botones { display: flex; justify-content: flex-end; gap: 10px; }
+
+/* ---------- Celulares y pantallas pequeñas ---------- */
+@media (max-width: 860px) {
+  .tarjetas { grid-template-columns: 1fr 1fr; }
+  .archivos .marco { grid-template-columns: 1fr; }
+  .detalle-archivo { grid-template-columns: 1fr; }
+  .sujetos, .teoria .sujetos { flex-direction: row; }
+  .empleados .rejilla { grid-template-columns: 1fr 1fr; }
+  .protocolo .marco { grid-template-columns: 1fr; }
+  .error-caja { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  .tarjetas, .empleados .rejilla, .controles { grid-template-columns: 1fr; }
+  .sujetos { flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .terminal .cursor { animation: none; }
+  .boton { transition: none; }
+}
+
+/* ---------- Reporte general: separación entre párrafos ---------- */
+.reporte p + p { margin-top: 1rem; }
+
+/* ---------- Ficha completa de cada persona ---------- */
+dialog.ficha { width: min(92vw, 40rem); max-height: 85vh; overflow-y: auto; }
+.ficha .codigo { font-size: 13px; font-style: italic; color: var(--verde-suave); }
+.ficha h3 { font-size: 22px; margin: 6px 0 18px; }
+.ficha__datos {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  padding: 14px 0; margin-bottom: 20px;
+  border-top: 1px solid var(--borde-vidrio); border-bottom: 1px solid var(--borde-vidrio);
+  font-size: 12px;
+}
+.ficha__datos dt { font-weight: 700; margin-bottom: 4px; }
+.ficha__datos dd { color: #b3cfcf; font-weight: 300; }
+.ficha h4 { font-size: 13px; font-weight: 700; color: var(--verde-suave); margin: 18px 0 6px; letter-spacing: 0.04em; }
+.ficha p:not(.codigo) { font-size: 12px; text-align: justify; }
+.ficha .botones { margin-top: 24px; }
+@media (max-width: 520px) { .ficha__datos { grid-template-columns: 1fr; } }
+
+/* ---------- Ruta de acceso dentro del menú lateral ---------- */
+.migas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.125rem 0.5rem;
+  margin-top: 1rem;
+  padding: 0 10px;
+  font-size: 0.6875rem;
+  line-height: 1.7;
+}
+.migas a { color: var(--verde-suave); text-decoration: none; }
+.migas a:hover { text-decoration: underline; }
+.migas [aria-current="page"] { color: var(--crema); font-weight: 700; }
+.migas__separador { opacity: 0.6; }
+
+/* ---------- Imágenes dentro de los cuadros de "Sujeto" ---------- */
+.sujeto { position: relative; overflow: hidden; }
+.sujeto img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.sujeto span { position: relative; z-index: 1; }
+/* Sombra suave abajo para que el texto se lea sobre la foto */
+.sujeto--foto::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent 50%);
+}
+
+/* ---------- Visor de imágenes (carrusel) ---------- */
+dialog.visor {
+  width: 100%; height: 100%;
+  max-width: none; max-height: none;
+  margin: 0; padding: 2rem;
+  border: 0; border-radius: 0;
+  background: rgba(0, 20, 26, 0.9);
+}
+.visor[open] {             /* [open] es importante: si no, el visor se vería siempre */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.visor__figura { margin: 0; text-align: center; max-width: min(80vw, 60rem); }
+.visor__figura img {
+  max-width: 100%;
+  max-height: 75vh;
+  object-fit: contain;
+  border-radius: 1rem;
+}
+.visor__figura figcaption { margin-top: 0.75rem; font-size: 0.75rem; font-style: italic; }
+.visor__flecha, .visor__cerrar {
+  background: var(--crema);
+  color: #10262e;
+  border: 0;
+  border-radius: 50%;
+  width: 2.75rem; height: 2.75rem;
+  font-size: 1.5rem; line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.visor__cerrar { position: absolute; top: 1.25rem; right: 1.25rem; font-size: 1rem; }
+.visor__flecha:hover, .visor__cerrar:hover { background: #fff; }
+.visor button:focus-visible { outline: 2px solid var(--morado-acento); outline-offset: 3px; }
+
+@media (max-width: 520px) {
+  .visor[open] { flex-wrap: wrap; align-content: center; }
+  .visor__figura { order: -1; max-width: 100%; }
+}
+
+/* ---------- Desbloqueo del archivo de fauna (pantalla de ondas) ---------- */
+.sincronia {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+.sincronia__pista { font-size: 0.75rem; font-style: italic; font-weight: 300; }
+.sincronia__estado { font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.06em; }
+
+.candado-fauna {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: min(100%, 36rem);
+  margin-top: 0.5rem;
+  padding: 1rem 1.25rem;
+  text-align: left;
+  border: 1px dashed var(--borde-vidrio);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.04);
+  opacity: 0.6;
+  transition: opacity 0.4s ease, background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+.candado-fauna.desbloqueada {
+  opacity: 1;
+  border-style: solid;
+  border-color: var(--verde-suave);
+  background: rgba(127, 181, 176, 0.15);
+  box-shadow: 0 0 1.5rem rgba(127, 181, 176, 0.35);
+}
+.candado-fauna__icono { font-size: 1.5rem; }
+.candado-fauna__titulo { font-size: 0.875rem; font-weight: 700; }
+.candado-fauna__texto { font-size: 0.75rem; }
+.candado-fauna .boton { margin-left: auto; white-space: nowrap; }
+
+@media (max-width: 520px) {
+  .candado-fauna { flex-wrap: wrap; }
+  .candado-fauna .boton { margin-left: 0; width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .candado-fauna { transition: none; }
+}
+
+/* ---------- Tarjeta del Protocolo ARCA cuando ya está disponible ---------- */
+.tarjeta.disponible {
+  background: rgba(120, 100, 190, 0.42);
+  color: var(--crema);
+  border-color: var(--morado-acento);
+  box-shadow: 0 0 1.5rem rgba(184, 192, 245, 0.35);
+}
+.tarjeta.disponible .equis { display: inline-flex; }
+
+/* ---------- Mapa interactivo del protocolo ---------- */
+.mapa { touch-action: none; user-select: none; }   /* que el dedo arrastre la pieza y no la página */
+.mapa .guias polygon {
+  fill: rgba(0, 0, 0, 0.18);
+  stroke: var(--morado-claro);
+  stroke-width: 2;
+  stroke-dasharray: 6 6;
+}
+.mapa .pieza { cursor: grab; transition: fill 0.3s ease; }
+.mapa .pieza.arrastrando { cursor: grabbing; fill: #a59dc4; }
+.mapa .pieza:focus { outline: none; }
+.mapa .pieza:focus-visible { stroke: var(--morado-acento); }
+.mapa .pieza.encajada { cursor: default; }
+.mapa.completo .pieza { fill: var(--morado-acento); }
+.estado-mapa { font-weight: 700; color: var(--morado-acento); }
+
+/* ---------- Cierre final ---------- */
+.cierre {
+  position: fixed; inset: 0; z-index: 100;
+  display: grid; place-items: center;
+  background: #000;
+  opacity: 0; pointer-events: none;
+  transition: opacity 1.5s ease;
+}
+.cierre p {
+  color: var(--morado-acento); font-size: 0.875rem; letter-spacing: 0.1em;
+  opacity: 0; transition: opacity 1s ease;
+}
+body.apagando .cierre { opacity: 1; pointer-events: auto; }
+body.apagada .cierre p { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .cierre, .cierre p, .mapa .pieza { transition: none; }
+}
+>>>>>>> Stashed changes

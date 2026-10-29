@@ -6,6 +6,310 @@
     <title>Proyecto-Arca</title>
 </head>
 <body>
+<<<<<<< Updated upstream
     
+=======
+
+<!-- Barra superior: se copia dentro de cada pantalla con JavaScript -->
+<template id="plantillaBarra">
+    <header class="barrainicio">
+
+      <a href="#inicio" aria-label="Volver al inicio">
+        <svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" viewBox="0 0 322 323" fill="none">
+          <path d="M161.077 146.887C161.196 146.953 161.316 147.018 161.435 147.084C173.346 179.274 195.168 239.531 205.906 269.125L212.06 286.058C213.184 289.162 214.411 292.897 215.693 295.878C211.009 295.512 202.291 295.787 197.315 295.787L127.908 295.789C120.919 295.792 113.423 295.683 106.474 295.962C110.758 285.359 115.093 272.285 119.098 261.307L155.165 162.064C156.683 157.858 159.087 150.565 161.077 146.887Z" fill="#F8EDDE"/>
+          <path d="M126.455 0H127.21C131.363 1.73336 184.54 0.588943 194.29 0.793251C196.443 4.51419 197.771 8.31992 199.335 12.303L319.603 315.251C320.218 316.796 322.223 320.706 321.882 322.075C319.412 322.667 306.791 322.446 303.444 322.441L253.391 322.011C251.756 318.284 250.092 313.483 248.627 309.571L239.672 285.478L165.895 88.3572C164.185 83.7586 162.043 78.5062 160.568 73.935C157.342 80.7274 153.905 91.0517 151.225 98.3701L135.71 140.558L73.6477 306.444C72.62 309.181 68.9346 319.642 67.5939 321.4C65.2926 321.723 61.3872 321.594 58.944 321.594L43.4519 321.591L17.0243 321.456C11.634 321.444 5.27258 321.617 0 321.337C1.25925 317.119 3.43585 311.975 5.08 307.823L119.795 15.7252C120.876 12.972 124.949 1.89728 126.455 0Z" fill="#F8EDDE"/>
+        </svg>
+      </a>
+      
+      <div class="accionesinicio">
+        <button type="button" class="idioma" aria-label="Cambiar idioma">
+          <span class="codigo-idioma">ES</span> <span aria-hidden="true">🇪🇸</span>
+        </button>
+        <button type="button" class="accesibilidad" aria-label="Opciones de accesibilidad">
+          <svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" viewBox="0 0 35 35" fill="none">
+            <path d="M17.5005 9.06281C18.1221 9.06281 18.7183 8.81587 19.1579 8.3763C19.5974 7.93673 19.8444 7.34055 19.8444 6.71891C19.8444 6.09726 19.5974 5.50108 19.1579 5.06151C18.7183 4.62195 18.1221 4.375 17.5005 4.375C16.8788 4.375 16.2826 4.62195 15.8431 5.06151C15.4035 5.50108 15.1566 6.09726 15.1566 6.71891C15.1566 7.34055 15.4035 7.93673 15.8431 8.3763C16.2826 8.81587 16.8788 9.06281 17.5005 9.06281ZM7.28921 12.2784L14.3767 12.9697V18.4384L13.6702 28.4681C13.6582 28.6743 13.7229 28.8776 13.8517 29.039C13.9804 29.2004 14.1643 29.3086 14.3679 29.3427C14.5716 29.3769 14.7807 29.3347 14.9551 29.2241C15.1295 29.1136 15.2569 28.9425 15.313 28.7437L17.1198 19.9566C17.2183 19.5628 17.7783 19.5628 17.8767 19.9566L19.688 28.7416C19.742 28.9424 19.8688 29.116 20.0437 29.2285C20.2187 29.341 20.4292 29.3845 20.6344 29.3504C20.8396 29.3163 21.0247 29.2071 21.1538 29.044C21.283 28.8809 21.3468 28.6757 21.333 28.4681L20.6286 18.4406V12.9719L27.7139 12.2806C27.9204 12.2507 28.1082 12.1442 28.2398 11.9822C28.3714 11.8202 28.4373 11.6147 28.4244 11.4064C28.4114 11.1981 28.3206 11.0023 28.1699 10.8579C28.0192 10.7134 27.8198 10.631 27.6111 10.6269H7.39203C7.18336 10.631 6.98388 10.7134 6.83321 10.8579C6.68254 11.0023 6.5917 11.1981 6.57875 11.4064C6.5658 11.6147 6.63168 11.8202 6.76331 11.9822C6.89493 12.1442 7.08267 12.2485 7.28921 12.2784Z" fill="#F8EDDE"/>
+            <path d="M17.5 0C12.8587 0 8.40752 1.84374 5.12563 5.12563C1.84374 8.40752 0 12.8587 0 17.5C0 22.1413 1.84374 26.5925 5.12563 29.8744C8.40752 33.1563 12.8587 35 17.5 35C22.1413 35 26.5925 33.1563 29.8744 29.8744C33.1563 26.5925 35 22.1413 35 17.5C35 12.8587 33.1563 8.40752 29.8744 5.12563C26.5925 1.84374 22.1413 0 17.5 0ZM2.1875 17.5C2.1875 13.4389 3.80078 9.54408 6.67243 6.67243C9.54408 3.80078 13.4389 2.1875 17.5 2.1875C21.5611 2.1875 25.4559 3.80078 28.3276 6.67243C31.1992 9.54408 32.8125 13.4389 32.8125 17.5C32.8125 21.5611 31.1992 25.4559 28.3276 28.3276C25.4559 31.1992 21.5611 32.8125 17.5 32.8125C13.4389 32.8125 9.54408 31.1992 6.67243 28.3276C3.80078 25.4559 2.1875 21.5611 2.1875 17.5Z" fill="#F8EDDE"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+</template>
+
+<!-- ========== 1. INICIO ========== -->
+<section class="pantalla inicio" id="inicio">
+  <header class="barrainicio2">
+    <div class="accionesinicio2">
+      <button type="button" class="idioma" aria-label="Cambiar idioma">
+        <span class="codigo-idioma">ES</span> <span aria-hidden="true">🇪🇸</span>
+      </button>
+      <button type="button" class="accesibilidad" aria-label="Opciones de accesibilidad">
+        <svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" viewBox="0 0 35 35" fill="none">
+          <path d="M17.5005 9.06281C18.1221 9.06281 18.7183 8.81587 19.1579 8.3763C19.5974 7.93673 19.8444 7.34055 19.8444 6.71891C19.8444 6.09726 19.5974 5.50108 19.1579 5.06151C18.7183 4.62195 18.1221 4.375 17.5005 4.375C16.8788 4.375 16.2826 4.62195 15.8431 5.06151C15.4035 5.50108 15.1566 6.09726 15.1566 6.71891C15.1566 7.34055 15.4035 7.93673 15.8431 8.3763C16.2826 8.81587 16.8788 9.06281 17.5005 9.06281ZM7.28921 12.2784L14.3767 12.9697V18.4384L13.6702 28.4681C13.6582 28.6743 13.7229 28.8776 13.8517 29.039C13.9804 29.2004 14.1643 29.3086 14.3679 29.3427C14.5716 29.3769 14.7807 29.3347 14.9551 29.2241C15.1295 29.1136 15.2569 28.9425 15.313 28.7437L17.1198 19.9566C17.2183 19.5628 17.7783 19.5628 17.8767 19.9566L19.688 28.7416C19.742 28.9424 19.8688 29.116 20.0437 29.2285C20.2187 29.341 20.4292 29.3845 20.6344 29.3504C20.8396 29.3163 21.0247 29.2071 21.1538 29.044C21.283 28.8809 21.3468 28.6757 21.333 28.4681L20.6286 18.4406V12.9719L27.7139 12.2806C27.9204 12.2507 28.1082 12.1442 28.2398 11.9822C28.3714 11.8202 28.4373 11.6147 28.4244 11.4064C28.4114 11.1981 28.3206 11.0023 28.1699 10.8579C28.0192 10.7134 27.8198 10.631 27.6111 10.6269H7.39203C7.18336 10.631 6.98388 10.7134 6.83321 10.8579C6.68254 11.0023 6.5917 11.1981 6.57875 11.4064C6.5658 11.6147 6.63168 11.8202 6.76331 11.9822C6.89493 12.1442 7.08267 12.2485 7.28921 12.2784Z" fill="#F8EDDE"/>
+            <path d="M17.5 0C12.8587 0 8.40752 1.84374 5.12563 5.12563C1.84374 8.40752 0 12.8587 0 17.5C0 22.1413 1.84374 26.5925 5.12563 29.8744C8.40752 33.1563 12.8587 35 17.5 35C22.1413 35 26.5925 33.1563 29.8744 29.8744C33.1563 26.5925 35 22.1413 35 17.5C35 12.8587 33.1563 8.40752 29.8744 5.12563C26.5925 1.84374 22.1413 0 17.5 0ZM2.1875 17.5C2.1875 13.4389 3.80078 9.54408 6.67243 6.67243C9.54408 3.80078 13.4389 2.1875 17.5 2.1875C21.5611 2.1875 25.4559 3.80078 28.3276 6.67243C31.1992 9.54408 32.8125 13.4389 32.8125 17.5C32.8125 21.5611 31.1992 25.4559 28.3276 28.3276C25.4559 31.1992 21.5611 32.8125 17.5 32.8125C13.4389 32.8125 9.54408 31.1992 6.67243 28.3276C3.80078 25.4559 2.1875 21.5611 2.1875 17.5Z" fill="#F8EDDE"/>
+          </svg>
+      </button>
+    </div>
+  </header>  
+  
+  
+  <div class="centro">
+      <svg xmlns="http://www.w3.org/2000/svg" width="12rem" height="12rem" viewBox="0 0 322 323" fill="none">
+        <path d="M161.077 146.887C161.196 146.953 161.316 147.018 161.435 147.084C173.346 179.274 195.168 239.531 205.906 269.125L212.06 286.058C213.184 289.162 214.411 292.897 215.693 295.878C211.009 295.512 202.291 295.787 197.315 295.787L127.908 295.789C120.919 295.792 113.423 295.683 106.474 295.962C110.758 285.359 115.093 272.285 119.098 261.307L155.165 162.064C156.683 157.858 159.087 150.565 161.077 146.887Z" fill="#F8EDDE"/>
+        <path d="M126.455 0H127.21C131.363 1.73336 184.54 0.588943 194.29 0.793251C196.443 4.51419 197.771 8.31992 199.335 12.303L319.603 315.251C320.218 316.796 322.223 320.706 321.882 322.075C319.412 322.667 306.791 322.446 303.444 322.441L253.391 322.011C251.756 318.284 250.092 313.483 248.627 309.571L239.672 285.478L165.895 88.3572C164.185 83.7586 162.043 78.5062 160.568 73.935C157.342 80.7274 153.905 91.0517 151.225 98.3701L135.71 140.558L73.6477 306.444C72.62 309.181 68.9346 319.642 67.5939 321.4C65.2926 321.723 61.3872 321.594 58.944 321.594L43.4519 321.591L17.0243 321.456C11.634 321.444 5.27258 321.617 0 321.337C1.25925 317.119 3.43585 311.975 5.08 307.823L119.795 15.7252C120.876 12.972 124.949 1.89728 126.455 0Z" fill="#F8EDDE"/>
+      </svg>
+    
+    <h1 class="titulo">PROYECTO ARCA</h1>
+    <p class="detalle">1 Archivo Encontrado<br>"Reporte General"</p>
+    <button class="boton" type="button" data-ir="landing">ABRIR ARCHIVO</button>
+  </div>
+</section>
+
+<!-- ========== 2. LANDING O REPORTE GENERAL ========== -->
+<section class="pantalla landing" id="landing" data-barra>
+  <div class="contenido">
+    <h1 class="titulo">PROYECTO ARCA</h1>
+
+    <article class="vidrio reporte">
+      <div class="cabecera">
+        <h2>REPORTE GENERAL</h2>
+        <span class="tenue">Acceso Público</span>
+      </div>
+      <p>Desde el inicio del fenómeno, las precipitaciones a nivel global han superado todos los registros históricos conocidos. La lluvia se mantiene constante, sin interrupciones significativas, durante un periodo que ya excede cualquier proyección climática previa. Los modelos predictivos desarrollados antes del colapso han fallado de forma sistemática: ninguno contemplaba una alteración sostenida del ciclo hidrológico de esta magnitud ni de esta duración. Las consecuencias sobre la infraestructura y los ecosistemas son irreversibles. El nivel del mar continúa en ascenso y las masas continentales habitables se reducen de manera progresiva.</p>
+      <p>No obstante, el análisis de los datos revela comportamientos que los modelos convencionales no logran explicar. Las precipitaciones presentan patrones de repetición que no corresponden a ninguna dinámica atmosférica documentada. Se han detectado anomalías en la sincronía de las corrientes y en el comportamiento de ciertas especies, así como fluctuaciones recurrentes cuya regularidad resulta difícil de atribuir al azar. El fenómeno, lejos de estabilizarse o disiparse, parece responder a una lógica propia que escapa a los marcos de interpretación disponibles. Se recomienda ampliar la investigación.</p>
+    </article>
+
+    <h2 class="seccion">ARCHIVOS CLASIFICADOS</h2>
+    <div class="tarjetas">
+      <div class="vidrio tarjeta" data-tarjeta="anomalias">
+        <div class="fila"><span>Registro de anomalías</span>
+            <span class="icono-candado" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                width="16" height="16"
+                fill="currentColor"
+                viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                d="M8 0a4 4 0 0 1 4 4v2.05a2.5 2.5 0 0 1 2 2.45v5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5v-5a2.5 2.5 0 0 1 2-2.45V4a4 4 0 0 1 4-4M4.5 7A1.5 1.5 0 0 0 3 8.5v5A1.5 1.5 0 0 0 4.5 15h7a1.5 1.5 0 0 0 1.5-1.5v-5A1.5 1.5 0 0 0 11.5 7zM8 1a3 3 0 0 0-3 3v2h6V4a3 3 0 0 0-3-3"/>
+            </svg>
+        </span></div>
+        <button class="boton" type="button" data-clave="anomalias">Ingresar clave</button>
+        </div>
+
+      <div class="vidrio tarjeta" data-tarjeta="empleados">
+        <div class="fila"><span>Registros de Empleados</span>
+        <span class="icono-candado" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg"
+              width="16" height="16"
+              fill="currentColor"
+              viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M8 0a4 4 0 0 1 4 4v2.05a2.5 2.5 0 0 1 2 2.45v5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5v-5a2.5 2.5 0 0 1 2-2.45V4a4 4 0 0 1 4-4M4.5 7A1.5 1.5 0 0 0 3 8.5v5A1.5 1.5 0 0 0 4.5 15h7a1.5 1.5 0 0 0 1.5-1.5v-5A1.5 1.5 0 0 0 11.5 7zM8 1a3 3 0 0 0-3 3v2h6V4a3 3 0 0 0-3-3"/>
+          </svg>
+      </span></div>
+
+      <button class="boton" type="button" data-clave="empleados">Ingresar clave</button>
+      </div>
+      <div class="vidrio tarjeta" data-tarjeta="teoria">
+        <div class="fila"><span>Teoría Clasificada</span>
+        <span class="icono-candado" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg"
+              width="16" height="16"
+              fill="currentColor"
+              viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M8 0a4 4 0 0 1 4 4v2.05a2.5 2.5 0 0 1 2 2.45v5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5v-5a2.5 2.5 0 0 1 2-2.45V4a4 4 0 0 1 4-4M4.5 7A1.5 1.5 0 0 0 3 8.5v5A1.5 1.5 0 0 0 4.5 15h7a1.5 1.5 0 0 0 1.5-1.5v-5A1.5 1.5 0 0 0 11.5 7zM8 1a3 3 0 0 0-3 3v2h6V4a3 3 0 0 0-3-3"/>
+          </svg>
+        </span></div>
+        <button class="boton" type="button" data-clave="teoria">Ingresar clave</button>
+      </div>
+      <div class="vidrio tarjeta restringida" id="tarjetaProtocolo">
+        <div class="fila"><span>PROTOCOLO ARCA</span><span class="equis" id="equisProtocolo" aria-hidden="true">X</span></div>
+        <button class="boton" type="button" id="botonProtocolo" data-ir="protocolo-error" disabled>RESTRINGIDO</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 3. REGISTRO DE ANOMALÍAS ========== -->
+<section class="pantalla archivos" id="anomalias" data-barra>
+  <div class="marco">
+    <nav class="vidrio menu" aria-label="Archivos de anomalías">
+      <h2>Archivos</h2>
+      <p class="nivel tenue">Confidencialidad Baja</p>
+      <nav class="migas" aria-label="Ruta de acceso"></nav>
+      <ul class="lista" data-lista="anomalias"></ul>
+    </nav>
+    <article class="vidrio detalle-archivo" data-detalle="anomalias"></article>
+  </div>
+</section>
+
+<!-- ========== 4. REGISTRO DE RESPUESTAS (ondas) ========== -->
+<section class="pantalla respuestas" id="respuestas" data-barra>
+  <div class="vidrio panel-ondas">
+    <p class="tenue">//Sincronización de Frecuencia</p>
+    <svg viewBox="0 0 600 260" role="img" aria-label="Dos ondas que se pueden ajustar con los controles">
+      <defs>
+        <filter id="brillo" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3" result="difuso"/>
+          <feMerge><feMergeNode in="difuso"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <path id="ondaPunteada" fill="none" stroke="#8fd0cb" stroke-width="3" stroke-dasharray="7 8" stroke-linecap="round" filter="url(#brillo)"/>
+      <path id="ondaSolida" fill="none" stroke="#9cc7c2" stroke-width="4" stroke-linecap="round" filter="url(#brillo)"/>
+    </svg>
+    <div class="controles">
+      <div>
+        <label for="amplitud">Amplitud de Onda</label>
+        <input type="range" id="amplitud" min="10" max="100" value="45">
+      </div>
+      <div>
+        <label for="banda">Ancho de Banda</label>
+        <input type="range" id="banda" min="10" max="100" value="85">
+      </div>
+    </div>
+    <!-- Desbloqueo del archivo de fauna -->
+    <div class="sincronia">
+      <p class="sincronia__pista">Mueve los deslizadores hasta que la onda continua coincida con la punteada.</p>
+      <p class="sincronia__estado" id="estadoSincronia" aria-live="polite">Sincronía: 0%</p>
+      <div class="candado-fauna" id="tarjetaFauna">
+        <span class="candado-fauna__icono" id="iconoFauna" aria-hidden="true">🔒</span>
+        <div class="candado-fauna__datos">
+          <p class="candado-fauna__titulo">Archivo de fauna</p>
+          <p class="candado-fauna__texto" id="textoFauna">Bloqueado. Sincroniza la frecuencia para acceder.</p>
+        </div>
+        <button type="button" class="boton" id="botonFauna" data-ir="fauna" disabled>Abrir archivo</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 5. ARCHIVOS DE FAUNA ========== -->
+<section class="pantalla archivos" id="fauna" data-barra>
+  <div class="marco">
+    <nav class="vidrio menu" aria-label="Archivos de fauna">
+      <h2>Archivos</h2>
+      <p class="nivel tenue">Confidencialidad Baja</p>
+      <nav class="migas" aria-label="Ruta de acceso"></nav>
+      <ul class="lista" data-lista="fauna"></ul>
+    </nav>
+    <article class="vidrio detalle-archivo" data-detalle="fauna"></article>
+  </div>
+</section>
+
+<!-- ========== 6. REGISTRO DE EMPLEADOS ========== -->
+<section class="pantalla empleados" id="empleados" data-barra>
+  <div class="rejilla" id="rejillaEmpleados"></div>
+</section>
+
+<!-- ========== 7. TEORÍA CLASIFICADA ========== -->
+<section class="pantalla archivos teoria" id="teoria" data-barra>
+  <div class="marco">
+    <nav class="vidrio menu" aria-label="Teoría clasificada">
+      <h2>Archivos</h2>
+      <p class="nivel tenue">Confidencialidad Media</p>
+      <nav class="migas" aria-label="Ruta de acceso"></nav>
+      <ul class="lista" data-lista="teoria"></ul>
+    </nav>
+    <article class="vidrio detalle-archivo sin-lateral" data-detalle="teoria"></article>
+  </div>
+</section>
+
+<!-- ========== 8. PROTOCOLO ARCA: ERROR ========== -->
+<section class="pantalla protocolo" id="protocolo-error" data-barra>
+  <div class="marco">
+    <nav class="arbol" aria-label="Ruta actual">
+      <div>PROYECTO ARCA</div>
+      <div class="sub1">PROTOCOLO ARCA
+        <div class="sub2">ERROR</div>
+      </div>
+    </nav>
+    <div class="error-caja">
+      <!-- El mapa roto: arrastra cada pieza hasta su silueta punteada -->
+      <svg class="mapa" id="mapaProtocolo" viewBox="-60 -50 370 430" aria-label="Mapa desarmado. Arrastra cada pieza a su lugar, o usa las flechas del teclado.">
+        <!-- Siluetas: dónde va cada pieza -->
+        <g class="guias">
+          <polygon points="0,0 120,0 120,190 0,190"/>
+          <polygon points="124,0 250,0 250,200 124,200"/>
+          <polygon points="0,194 98,194 0,330"/>
+          <polygon points="102,194 130,194 170,330 102,330"/>
+          <polygon points="134,204 250,204 250,330 174,330"/>
+        </g>
+        <!-- Piezas que se pueden mover -->
+        <g class="piezas" fill="#8a82a8" stroke="#3e3a52" stroke-width="4" stroke-linejoin="round">
+          <polygon class="pieza" tabindex="0" aria-label="Pieza 1 del mapa" points="0,0 120,0 120,190 0,190"/>
+          <polygon class="pieza" tabindex="0" aria-label="Pieza 2 del mapa" points="124,0 250,0 250,200 124,200"/>
+          <polygon class="pieza" tabindex="0" aria-label="Pieza 3 del mapa" points="0,194 98,194 0,330"/>
+          <polygon class="pieza" tabindex="0" aria-label="Pieza 4 del mapa" points="102,194 130,194 170,330 102,330"/>
+          <polygon class="pieza" tabindex="0" aria-label="Pieza 5 del mapa" points="134,204 250,204 250,330 174,330"/>
+        </g>
+      </svg>
+      <div class="error-texto">
+        <h2>ERROR</h2>
+        <p>El mapa del protocolo se desarmó y sus piezas no coinciden. Es necesario unirlo de nuevo antes de continuar.</p>
+        <p>Revisa las piezas, vuelve a ordenarlas y confirma para reintentar la conexión con el archivo.</p>
+        <p class="estado-mapa" id="estadoMapa" aria-live="polite">Piezas en su lugar: 0 / 5</p>
+        <div class="botones">
+          <button class="salir boton" type="button" data-ir="landing">Salir</button>
+          <button class="boton lleno-morado" type="button" id="botonContinuar" data-ir="protocolo-terminal" disabled>Continuar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 9. PROTOCOLO ARCA: TERMINAL ========== -->
+<section class="pantalla protocolo terminal-pantalla" id="protocolo-terminal" data-barra>
+  <div class="terminal" id="terminal" aria-live="polite"></div>
+</section>
+
+<!-- Ventana de clave: la misma para los tres archivos, el JS cambia los textos -->
+<dialog id="ventanaClave">
+  <h3 id="tituloClave">Archivo clasificado</h3>
+  <label for="campoClave" id="etiquetaClave" style="font-size:12px;display:block;margin-bottom:8px;">Ingresa la clave de acceso</label>
+  <input type="text" id="campoClave" autocomplete="off" spellcheck="false">
+  <p class="mensaje" id="mensajeClave" role="alert"></p>
+  <div class="botones">
+    <button type="button" class="boton" id="cancelarClave" style="background:transparent;color:var(--texto);border:1px solid var(--borde-vidrio);">Cancelar</button>
+    <button type="button" class="boton" id="enviarClave">Entrar</button>
+  </div>
+</dialog>
+
+<!-- Ficha completa de cada persona del registro -->
+<dialog id="ventanaEmpleado" class="ficha" aria-labelledby="fichaNombre">
+  <p class="codigo" id="fichaCodigo"></p>
+  <h3 id="fichaNombre"></h3>
+  <dl class="ficha__datos">
+    <div><dt>Permanencia</dt><dd id="fichaPermanencia"></dd></div>
+    <div><dt>Estado</dt><dd id="fichaEstado"></dd></div>
+    <div><dt>Ocupación</dt><dd id="fichaOcupacion"></dd></div>
+  </dl>
+  <h4>Investigaciones recientes</h4>
+  <p id="fichaInvestigaciones"></p>
+  <h4>Hallazgos encontrados</h4>
+  <p id="fichaHallazgos"></p>
+  <h4>Posibles soluciones</h4>
+  <p id="fichaSoluciones"></p>
+  <div class="botones">
+    <button type="button" class="boton" id="cerrarFicha">Cerrar</button>
+  </div>
+</dialog>
+
+<!-- Visor de imágenes (carrusel) -->
+<dialog id="visor" class="visor" aria-label="Visor de imágenes">
+  <button type="button" class="visor__cerrar" id="visorCerrar" aria-label="Cerrar">✕</button>
+  <button type="button" class="visor__flecha" id="visorAtras" aria-label="Imagen anterior">‹</button>
+  <figure class="visor__figura">
+    <img id="visorImagen" src="" alt="">
+    <figcaption id="visorPie"></figcaption>
+  </figure>
+  <button type="button" class="visor__flecha" id="visorAdelante" aria-label="Imagen siguiente">›</button>
+</dialog>
+
+<!-- Fundido final: aparece cuando termina la animación del protocolo -->
+<div class="cierre" id="cierre" aria-live="assertive">
+  <p>Conexión terminada.</p>
+</div>
+
+<script src="Javascript.js"></script>
+>>>>>>> Stashed changes
 </body>
 </html>
