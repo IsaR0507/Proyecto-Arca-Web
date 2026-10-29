@@ -188,7 +188,7 @@ var empleados = [
     ocupacion: "Neurociencia y conciencia emergente",
     investigaciones: "Estudio de la posibilidad de conciencia en el fenómeno. Análisis del latido y de los patrones como si se tratara de actividad mental. Búsqueda de señales de intención detrás del comportamiento del planeta.",
     hallazgos: "Indicios de algo parecido a una voluntad. No solo un organismo que reacciona, sino una entidad que decide. Hallazgo de confirmación evitada por el resto del equipo durante meses.",
-    soluciones: "Para ella, si el planeta es consciente, es un rival. Toda entidad que compita por la supervivencia debe ser tratada como tal. Nota al margen del expediente: la conciencia del planeta no se registra como motivo para perdonarlo, sino para temerle."
+    soluciones: "Conclusión: si el planeta es consciente, es un rival. Toda entidad que compita por la supervivencia debe ser tratada como tal. Nota al margen del expediente: la conciencia del planeta no se registra como motivo para perdonarlo, sino para temerle."
   }
 ];
 
@@ -515,10 +515,11 @@ var lineasTerminal = [
   "> verificando integridad del mapa... [FALLO]",
   "> reconstruyendo piezas: 5 / 5",
   "> enlace con archivo restablecido",
-  "> EXTRAÑO IDENTIFICADO EN EL SISTEMA",
-  "> procesando comportamiento...",
+  "> EXTRAÑO DETECTADO EN EL SISTEMA",
+  "> analizando comportamiento.....",
   "> .....",
-  "> Ella sabe que estamos aquí",
+  "> Ella sabe que estamos aquí...",
+
 ];
 var temporizadorTerminal = null;
 
