@@ -560,7 +560,12 @@ var lineasTerminal = [
   "> verificando integridad del mapa... [FALLO]",
   "> reconstruyendo piezas: 5 / 5",
   "> enlace con archivo restablecido",
-  "> bienvenida/o al Proyecto Arca"
+  "> EXTRAÑO DETECTADO EN EL SISTEMA...",
+  "> .......",
+  "> analizando comportamiento",
+  "> .....",
+  "> .....",
+  "> Ella sabe que estamos aquí....",
 ];
 var temporizadorTerminal = null;
 
