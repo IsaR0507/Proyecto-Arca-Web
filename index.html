@@ -23,8 +23,12 @@
       </a>
       
       <div class="accionesinicio">
-        <button type="button" class="idioma" aria-label="Cambiar idioma">
-          <span class="codigo-idioma">ES</span> <span aria-hidden="true">🇪🇸</span>
+        <button type="button" class="sonido" aria-pressed="false" aria-label="Activar sonido">
+          <svg width="2rem" height="2rem" viewBox="0 0 32 32" fill="none" stroke="#F8EDDE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h5l7-6v20l-7-6H5z"/>
+            <path class="sonido__ondas" d="M21 11.5a6 6 0 0 1 0 9M24.5 8a11 11 0 0 1 0 16"/>
+            <path class="sonido__mute" d="M21 12.5l6.5 7M27.5 12.5l-6.5 7"/>
+          </svg>
         </button>
         <button type="button" class="accesibilidad" aria-label="Opciones de accesibilidad">
           <svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" viewBox="0 0 35 35" fill="none">
@@ -43,7 +47,14 @@
       <button type="button" class="idioma" aria-label="Cambiar idioma">
         <span class="codigo-idioma">ES</span> <span aria-hidden="true">🇪🇸</span>
       </button>
-      <button type="button" class="accesibilidad" aria-label="Opciones de accesibilidad">
+      <button type="button" class="sonido" aria-pressed="false" aria-label="Activar sonido">
+          <svg width="2rem" height="2rem" viewBox="0 0 32 32" fill="none" stroke="#F8EDDE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h5l7-6v20l-7-6H5z"/>
+            <path class="sonido__ondas" d="M21 11.5a6 6 0 0 1 0 9M24.5 8a11 11 0 0 1 0 16"/>
+            <path class="sonido__mute" d="M21 12.5l6.5 7M27.5 12.5l-6.5 7"/>
+          </svg>
+        </button>
+        <button type="button" class="accesibilidad" aria-label="Opciones de accesibilidad">
         <svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" viewBox="0 0 35 35" fill="none">
           <path d="M17.5005 9.06281C18.1221 9.06281 18.7183 8.81587 19.1579 8.3763C19.5974 7.93673 19.8444 7.34055 19.8444 6.71891C19.8444 6.09726 19.5974 5.50108 19.1579 5.06151C18.7183 4.62195 18.1221 4.375 17.5005 4.375C16.8788 4.375 16.2826 4.62195 15.8431 5.06151C15.4035 5.50108 15.1566 6.09726 15.1566 6.71891C15.1566 7.34055 15.4035 7.93673 15.8431 8.3763C16.2826 8.81587 16.8788 9.06281 17.5005 9.06281ZM7.28921 12.2784L14.3767 12.9697V18.4384L13.6702 28.4681C13.6582 28.6743 13.7229 28.8776 13.8517 29.039C13.9804 29.2004 14.1643 29.3086 14.3679 29.3427C14.5716 29.3769 14.7807 29.3347 14.9551 29.2241C15.1295 29.1136 15.2569 28.9425 15.313 28.7437L17.1198 19.9566C17.2183 19.5628 17.7783 19.5628 17.8767 19.9566L19.688 28.7416C19.742 28.9424 19.8688 29.116 20.0437 29.2285C20.2187 29.341 20.4292 29.3845 20.6344 29.3504C20.8396 29.3163 21.0247 29.2071 21.1538 29.044C21.283 28.8809 21.3468 28.6757 21.333 28.4681L20.6286 18.4406V12.9719L27.7139 12.2806C27.9204 12.2507 28.1082 12.1442 28.2398 11.9822C28.3714 11.8202 28.4373 11.6147 28.4244 11.4064C28.4114 11.1981 28.3206 11.0023 28.1699 10.8579C28.0192 10.7134 27.8198 10.631 27.6111 10.6269H7.39203C7.18336 10.631 6.98388 10.7134 6.83321 10.8579C6.68254 11.0023 6.5917 11.1981 6.57875 11.4064C6.5658 11.6147 6.63168 11.8202 6.76331 11.9822C6.89493 12.1442 7.08267 12.2485 7.28921 12.2784Z" fill="#F8EDDE"/>
             <path d="M17.5 0C12.8587 0 8.40752 1.84374 5.12563 5.12563C1.84374 8.40752 0 12.8587 0 17.5C0 22.1413 1.84374 26.5925 5.12563 29.8744C8.40752 33.1563 12.8587 35 17.5 35C22.1413 35 26.5925 33.1563 29.8744 29.8744C33.1563 26.5925 35 22.1413 35 17.5C35 12.8587 33.1563 8.40752 29.8744 5.12563C26.5925 1.84374 22.1413 0 17.5 0ZM2.1875 17.5C2.1875 13.4389 3.80078 9.54408 6.67243 6.67243C9.54408 3.80078 13.4389 2.1875 17.5 2.1875C21.5611 2.1875 25.4559 3.80078 28.3276 6.67243C31.1992 9.54408 32.8125 13.4389 32.8125 17.5C32.8125 21.5611 31.1992 25.4559 28.3276 28.3276C25.4559 31.1992 21.5611 32.8125 17.5 32.8125C13.4389 32.8125 9.54408 31.1992 6.67243 28.3276C3.80078 25.4559 2.1875 21.5611 2.1875 17.5Z" fill="#F8EDDE"/>

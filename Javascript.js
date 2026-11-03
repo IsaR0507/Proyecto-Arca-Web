@@ -315,7 +315,7 @@ function dibujarEmpleados() {
     // 4. Construcción de la tarjeta
     html +=
       '<article class="empleado' +
-        claseEstado + claseRestringida + '">' +
+        claseEstado + claseRestringida + '" style="--i:' + posicion + '">' +
 
         '<div class="foto" role="img" aria-label="Identificador de ' +
           persona.nombre + '">' +
@@ -376,15 +376,50 @@ function abrirFicha(posicion) {
   document.getElementById("fichaHallazgos").textContent = persona.hallazgos;
   document.getElementById("fichaSoluciones").textContent = persona.soluciones;
   ventanaFicha.showModal();
+  ventanaFicha.scrollTop = 0;
+  if (sinMovimiento()) return;
+
+  // La ficha "sale" de la tarjeta que se tocó y crece hasta el centro
+  var tarjeta = document.querySelector('[data-empleado="' + posicion + '"]').closest(".empleado");
+  var desde = tarjeta.getBoundingClientRect();
+  var hasta = ventanaFicha.getBoundingClientRect();
+  var dx = (desde.left + desde.width / 2) - (hasta.left + hasta.width / 2);
+  var dy = (desde.top + desde.height / 2) - (hasta.top + hasta.height / 2);
+  ventanaFicha.animate([
+    { transform: "translate(" + dx + "px, " + dy + "px) scale(0.3)", opacity: 0 },
+    { transform: "none", opacity: 1 }
+  ], { duration: 450, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)" });
 }
+
+// Cierre con animación (también con la tecla Esc)
+function cerrarFicha() {
+  if (!ventanaFicha.open || ventanaFicha.classList.contains("cerrando")) return;
+  if (sinMovimiento()) { ventanaFicha.close(); return; }
+  ventanaFicha.classList.add("cerrando");
+  var salida = ventanaFicha.animate([
+    { transform: "none", opacity: 1 },
+    { transform: "scale(0.94)", opacity: 0 }
+  ], { duration: 200, easing: "ease-in" });
+  salida.onfinish = function () {
+    ventanaFicha.classList.remove("cerrando");
+    ventanaFicha.close();
+  };
+}
+ventanaFicha.addEventListener("cancel", function (evento) {
+  evento.preventDefault();
+  cerrarFicha();
+});
+
+// Cada bloque de la ficha entra un poquito después del anterior
+Array.prototype.forEach.call(ventanaFicha.children, function (hijo, i) {
+  hijo.style.setProperty("--j", i);
+});
 
 document.getElementById("rejillaEmpleados").addEventListener("click", function (evento) {
   var boton = evento.target.closest("[data-empleado]");
   if (boton) abrirFicha(Number(boton.getAttribute("data-empleado")));
 });
-document.getElementById("cerrarFicha").addEventListener("click", function () {
-  ventanaFicha.close();
-});
+document.getElementById("cerrarFicha").addEventListener("click", cerrarFicha);
 
 // ---------------------------------------------------------------
 // Ondas: dos curvas que cambian con los controles
@@ -491,12 +526,22 @@ function revisarSincronia(amplitud, banda) {
   if (coincide) desbloquearFauna();
 }
 
-function actualizarOndas() {
+// faseOnda hace que las ondas viajen; pulso las agranda en cada latido.
+// Las dos usan los mismos valores, así la comparación sigue siendo justa.
+var faseOnda = 0, pulso = 1;
+
+function dibujarOndas() {
   var amplitud = Number(campoAmplitud.value);
   var banda = Number(campoBanda.value);
   // Punteada: la meta (siempre igual). Continua: la que mueves con los deslizadores.
-  ondaPunteada.setAttribute("d", crearOnda(objetivoAmplitud * 1.1, frecuenciaDe(objetivoBanda), 0, 0));
-  ondaSolida.setAttribute("d", crearOnda(amplitud * 1.1, frecuenciaDe(banda), 0, 0));
+  ondaPunteada.setAttribute("d", crearOnda(objetivoAmplitud * 1.1 * pulso, frecuenciaDe(objetivoBanda), faseOnda, 0));
+  ondaSolida.setAttribute("d", crearOnda(amplitud * 1.1 * pulso, frecuenciaDe(banda), faseOnda, 0));
+}
+
+function actualizarOndas() {
+  var amplitud = Number(campoAmplitud.value);
+  var banda = Number(campoBanda.value);
+  dibujarOndas();
   pintarRelleno(campoAmplitud);
   pintarRelleno(campoBanda);
   revisarSincronia(amplitud, banda);
@@ -515,11 +560,7 @@ var lineasTerminal = [
   "> verificando integridad del mapa... [FALLO]",
   "> reconstruyendo piezas: 5 / 5",
   "> enlace con archivo restablecido",
-  "> EXTRAÑO DETECTADO EN EL SISTEMA",
-  "> analizando comportamiento.....",
-  "> .....",
-  "> Ella sabe que estamos aquí...",
-
+  "> bienvenida/o al Proyecto Arca"
 ];
 var temporizadorTerminal = null;
 
@@ -558,6 +599,7 @@ function escribirTerminal() {
 function cerrarPagina() {
   try { sessionStorage.clear(); } catch (error) {}   // la próxima visita empieza de cero
   document.body.classList.add("apagando");
+  if (sonido.ctx) sonido.maestro.gain.linearRampToValueAtTime(0, sonido.ctx.currentTime + 1.5);
   setTimeout(function () {
     window.close();
     setTimeout(function () { document.body.classList.add("apagada"); }, 400);
@@ -663,6 +705,240 @@ mapa.addEventListener("keydown", function (evento) {
 });
 
 // ---------------------------------------------------------------
+// Movimiento: se respeta si la persona pidió "reducir movimiento"
+// ---------------------------------------------------------------
+var preferenciaMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)");
+function sinMovimiento() { return preferenciaMovimiento.matches; }
+
+// ---------------------------------------------------------------
+// Sonido: mar de fondo en toda la página + latido en las ondas.
+// Se genera con Web Audio, así que no necesita archivos de audio.
+// ---------------------------------------------------------------
+var VOLUMEN_GENERAL = 0.6;
+var sonido = { ctx: null, maestro: null, latidos: null, activo: false };
+
+function prepararSonido() {
+  if (sonido.ctx) return true;
+  var Contexto = window.AudioContext || window.webkitAudioContext;
+  if (!Contexto) return false;
+  var ctx = new Contexto();
+
+  var maestro = ctx.createGain();
+  maestro.gain.value = 0;
+  maestro.connect(ctx.destination);
+
+  // Ruido "marrón" de 8 s que se repite sin que se note el corte: la base del mar
+  var muestras = ctx.sampleRate * 8;
+  var mezcla = Math.floor(ctx.sampleRate * 0.5);
+  var buffer = ctx.createBuffer(2, muestras, ctx.sampleRate);
+  for (var canal = 0; canal < 2; canal++) {
+    var crudo = new Float32Array(muestras + mezcla), ultimo = 0;
+    for (var i = 0; i < crudo.length; i++) {
+      ultimo = (ultimo + 0.02 * (Math.random() * 2 - 1)) / 1.02;
+      crudo[i] = ultimo * 3.5;
+    }
+    var datos = buffer.getChannelData(canal);
+    for (var k = 0; k < muestras; k++) {
+      // El inicio se funde con lo que vendría después del final: el bucle no "salta"
+      datos[k] = k < mezcla
+        ? crudo[k] * (k / mezcla) + crudo[muestras + k] * (1 - k / mezcla)
+        : crudo[k];
+    }
+  }
+  var ruido = ctx.createBufferSource();
+  ruido.buffer = buffer;
+  ruido.loop = true;
+
+  var filtro = ctx.createBiquadFilter();   // quita los agudos: suena a agua, no a estática
+  filtro.type = "lowpass";
+  filtro.frequency.value = 520;
+  var olas = ctx.createGain();
+  olas.gain.value = 0.45;
+
+  // Las olas: un oscilador muy lento sube y baja el volumen y el brillo del ruido
+  var vaiven = ctx.createOscillator();
+  vaiven.frequency.value = 0.11;            // una ola cada ~9 segundos
+  var vaivenVolumen = ctx.createGain();
+  vaivenVolumen.gain.value = 0.3;
+  var vaivenFiltro = ctx.createGain();
+  vaivenFiltro.gain.value = 360;
+  vaiven.connect(vaivenVolumen);
+  vaivenVolumen.connect(olas.gain);
+  vaiven.connect(vaivenFiltro);
+  vaivenFiltro.connect(filtro.frequency);
+
+  ruido.connect(filtro);
+  filtro.connect(olas);
+  olas.connect(maestro);
+  ruido.start();
+  vaiven.start();
+
+  // Canal aparte para el latido
+  var latidos = ctx.createGain();
+  latidos.gain.value = 0.9;
+  latidos.connect(maestro);
+
+  sonido.ctx = ctx;
+  sonido.maestro = maestro;
+  sonido.latidos = latidos;
+  return true;
+}
+
+function pintarBotonesSonido() {
+  document.querySelectorAll(".sonido").forEach(function (boton) {
+    boton.setAttribute("aria-pressed", sonido.activo ? "true" : "false");
+    boton.setAttribute("aria-label", sonido.activo ? "Silenciar sonido" : "Activar sonido");
+  });
+}
+
+function activarSonido(encender) {
+  if (encender && !prepararSonido()) return;
+  sonido.activo = encender;
+  if (sonido.ctx) {
+    if (encender) sonido.ctx.resume();
+    var ahora = sonido.ctx.currentTime;
+    sonido.maestro.gain.cancelScheduledValues(ahora);
+    sonido.maestro.gain.setValueAtTime(sonido.maestro.gain.value, ahora);
+    sonido.maestro.gain.linearRampToValueAtTime(encender ? VOLUMEN_GENERAL : 0, ahora + 1.2);
+  }
+  try { sessionStorage.setItem("arcaSonido", encender ? "si" : "no"); } catch (error) {}
+  pintarBotonesSonido();
+}
+
+function preferenciaSonido() {
+  try { return sessionStorage.getItem("arcaSonido"); } catch (error) { return null; }
+}
+
+// Un golpe del corazón: tono grave que cae rápido
+function golpe(cuando, fuerza) {
+  var ctx = sonido.ctx;
+  var osc = ctx.createOscillator();
+  var vol = ctx.createGain();
+  osc.type = "triangle";   // tiene armónicos: se oye incluso en parlantes de portátil
+  osc.frequency.setValueAtTime(95, cuando);
+  osc.frequency.exponentialRampToValueAtTime(45, cuando + 0.16);
+  vol.gain.setValueAtTime(0.0001, cuando);
+  vol.gain.exponentialRampToValueAtTime(fuerza, cuando + 0.015);
+  vol.gain.exponentialRampToValueAtTime(0.0001, cuando + 0.24);
+  osc.connect(vol);
+  vol.connect(sonido.latidos);
+  osc.start(cuando);
+  osc.stop(cuando + 0.26);
+}
+
+// Botón de sonido (está en todas las barras)
+document.addEventListener("click", function (evento) {
+  if (evento.target.closest(".sonido")) activarSonido(!sonido.activo);
+});
+
+// "Abrir archivo" enciende el sonido, salvo que la persona lo haya silenciado antes
+document.querySelector('#inicio [data-ir="landing"]').addEventListener("click", function () {
+  if (preferenciaSonido() !== "no" && !sonido.activo) activarSonido(true);
+});
+
+// Si recarga la página con el sonido encendido, vuelve al primer toque
+// (el navegador no deja sonar nada antes de que la persona interactúe)
+document.addEventListener("pointerdown", function () {
+  if (preferenciaSonido() === "si" && !sonido.activo) activarSonido(true);
+}, { once: true });
+
+// ---------------------------------------------------------------
+// Latido de las ondas: brillo, tamaño y sonido van al mismo ritmo
+// ---------------------------------------------------------------
+var PERIODO_LATIDO = 1.1;   // segundos entre latidos (~55 por minuto)
+var svgOndas = ondaSolida.ownerSVGElement;
+var pantallaOndas = document.getElementById("respuestas");
+var animandoOndas = false, ultimoCuadro = 0, ultimoLatido = -1;
+
+// Forma del latido: un golpe fuerte ("lub") y uno suave ("dub"), de 0 a 1
+function formaLatido(t) {
+  var lub = Math.exp(-Math.pow(t / 0.07, 2));
+  var dub = 0.7 * Math.exp(-Math.pow((t - 0.3) / 0.07, 2));
+  return Math.max(lub, dub);
+}
+
+function animarOndas(ahora) {
+  if (!pantallaOndas.classList.contains("activa")) {
+    animandoOndas = false;
+    return;
+  }
+  var segundos = ahora / 1000;
+  var dt = ultimoCuadro ? Math.min(0.1, segundos - ultimoCuadro) : 0;
+  ultimoCuadro = segundos;
+
+  var intensidad = formaLatido(segundos % PERIODO_LATIDO);
+
+  // Cada latido nuevo suena (si el sonido está encendido)
+  var numero = Math.floor(segundos / PERIODO_LATIDO);
+  if (numero !== ultimoLatido) {
+    ultimoLatido = numero;
+    if (sonido.activo) {
+      var t0 = sonido.ctx.currentTime + 0.02;
+      golpe(t0, 0.9);
+      golpe(t0 + 0.3, 0.55);
+    }
+  }
+
+  if (!sinMovimiento()) {
+    faseOnda += dt * 1.6;              // la onda viaja hacia un lado
+    pulso = 1 + intensidad * 0.12;     // y se infla un poco en cada golpe
+  }
+  svgOndas.style.setProperty("--latido", intensidad.toFixed(3));
+  dibujarOndas();
+  requestAnimationFrame(animarOndas);
+}
+
+function iniciarOndasVivas() {
+  if (animandoOndas) return;
+  animandoOndas = true;
+  ultimoCuadro = 0;
+  requestAnimationFrame(animarOndas);
+}
+
+// ---------------------------------------------------------------
+// Transiciones entre pantallas
+// ---------------------------------------------------------------
+var pantallaActual = null;
+var logoInicio = document.querySelector("#inicio .centro > svg");
+
+// El logo del centro viaja hasta la esquina de la barra del reporte.
+// No cambia la posición de nada: una copia vuela por encima y al llegar
+// se muestra el logo real, que ya estaba en su sitio.
+function volarLogo(desde) {
+  var logoBarra = document.querySelector("#landing .barrainicio a svg");
+  if (!logoBarra || sinMovimiento()) return;
+  var hasta = logoBarra.getBoundingClientRect();
+  if (!desde.width || !hasta.width) return;
+
+  var copia = logoInicio.cloneNode(true);
+  copia.setAttribute("aria-hidden", "true");
+  copia.classList.add("logo-volando");
+  copia.style.left = desde.left + "px";
+  copia.style.top = desde.top + "px";
+  copia.style.width = desde.width + "px";
+  copia.style.height = desde.height + "px";
+  document.body.appendChild(copia);
+  logoBarra.style.visibility = "hidden";
+
+  var viaje = copia.animate([
+    { transform: "translate(0, 0) scale(1)" },
+    { transform: "translate(" + (hasta.left - desde.left) + "px, " + (hasta.top - desde.top) + "px) scale(" + (hasta.width / desde.width) + ")" }
+  ], { duration: 900, easing: "cubic-bezier(0.65, 0, 0.35, 1)", fill: "forwards" });
+
+  viaje.onfinish = function () {
+    logoBarra.style.visibility = "";
+    copia.remove();
+  };
+}
+
+// Reinicia una animación CSS quitando y poniendo la clase
+function repetirAnimacion(elemento, clase) {
+  elemento.classList.remove(clase);
+  void elemento.offsetWidth;
+  elemento.classList.add(clase);
+}
+
+// ---------------------------------------------------------------
 // Navegación entre pantallas (usa el # de la dirección)
 // ---------------------------------------------------------------
 
@@ -696,10 +972,24 @@ function mostrarPantalla(nombre) {
   }
 
   var destino = document.getElementById(nombre) ? nombre : "inicio";
+
+  // Del inicio al reporte: se mide el logo ANTES de cambiar de pantalla
+  var desdeLogo = pantallaActual === "inicio" && destino === "landing"
+    ? logoInicio.getBoundingClientRect()
+    : null;
+
   document.querySelectorAll(".pantalla").forEach(function (pantalla) {
     pantalla.classList.toggle("activa", pantalla.id === destino);
   });
   window.scrollTo(0, 0);
+  pantallaActual = destino;
+
+  if (desdeLogo) {
+    volarLogo(desdeLogo);
+    repetirAnimacion(document.getElementById("landing"), "llegando");
+  }
+  if (destino === "empleados") repetirAnimacion(document.getElementById("rejillaEmpleados"), "entrando");
+  if (destino === "respuestas") iniciarOndasVivas();
   // Si sales de la terminal antes de que termine, se cancela el cierre
   if (destino !== "protocolo-terminal") clearTimeout(temporizadorTerminal);
   if (destino === "protocolo-error" && !mapaCompleto) reiniciarMapa();
@@ -916,5 +1206,6 @@ dibujarArchivos("teoria");
 dibujarEmpleados();
 pintarCandadoFauna();
 pintarTarjetas();
+pintarBotonesSonido();
 reiniciarMapa();
 mostrarPantalla(location.hash.replace("#", "") || "inicio");

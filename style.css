@@ -566,3 +566,110 @@ body.apagada .cierre p { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   .cierre, .cierre p, .mapa .pieza { transition: none; }
 }
+
+
+/* =================================================================
+   TRANSICIONES Y ANIMACIONES
+   ================================================================= */
+
+/* ---------- Inicio: "1 Archivo Encontrado" titila como notificación ---------- */
+.centro .detalle {
+  position: relative;
+  animation: notificacion 2.8s ease-in-out infinite;
+}
+/* Puntito de aviso a la izquierda (posición absoluta: no mueve el texto) */
+.centro .detalle::before {
+  content: "";
+  position: absolute;
+  left: -16px;
+  top: 0.35em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #8fd0cb;
+  animation: aviso 2.8s ease-out infinite;
+}
+@keyframes notificacion {
+  0%, 40%, 100% { opacity: 1; text-shadow: none; }
+  6%, 18%       { opacity: 0.3; }
+  12%, 24%      { opacity: 1; text-shadow: 0 0 10px rgba(143, 208, 203, 0.9); }
+}
+@keyframes aviso {
+  0%       { box-shadow: 0 0 0 0 rgba(143, 208, 203, 0.7); }
+  45%, 100% { box-shadow: 0 0 0 9px rgba(143, 208, 203, 0); }
+}
+
+/* ---------- Del inicio al reporte: el logo que vuela ---------- */
+.logo-volando {
+  position: fixed;
+  z-index: 60;
+  margin: 0;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+/* Mientras el logo vuela, el contenido del reporte aparece (solo opacidad) */
+.landing.llegando .contenido { animation: aparecer 0.6s 0.35s ease-out backwards; }
+@keyframes aparecer { from { opacity: 0; } }
+
+/* ---------- Sincronizar frecuencia: las ondas laten y brillan ---------- */
+/* --latido va de 0 a 1 y lo actualiza el JS al ritmo del corazón */
+.respuestas svg {
+  overflow: visible;
+  filter:
+    brightness(calc(1 + var(--latido, 0) * 0.35))
+    drop-shadow(0 0 calc(2px + var(--latido, 0) * 10px) rgba(143, 208, 203, 0.75));
+}
+
+/* ---------- Registro de empleados ---------- */
+/* Las tarjetas entran una tras otra */
+.empleados .rejilla.entrando .empleado {
+  animation: tarjetaEntra 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+@keyframes tarjetaEntra {
+  from { opacity: 0; transform: translateY(18px) scale(0.97); }
+}
+
+/* Al pasar el mouse (o con Tab) la tarjeta se levanta y brilla */
+.empleado { transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; }
+.empleado .foto { transition: box-shadow 0.25s ease; }
+.empleado:not(.empleado-tachado):hover,
+.empleado:not(.empleado-tachado):focus-within {
+  transform: translateY(-4px);
+  border-color: rgba(127, 181, 176, 0.7);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35), 0 0 18px rgba(127, 181, 176, 0.18);
+}
+.empleado:not(.empleado-tachado):hover .foto,
+.empleado:not(.empleado-tachado):focus-within .foto {
+  box-shadow: 0 0 0 4px rgba(127, 181, 176, 0.2), 0 0 16px rgba(143, 208, 203, 0.45);
+}
+/* Los expedientes bloqueados "fallan" un instante al pasar el mouse */
+.empleado.empleado-tachado:hover .sello-restringido { animation: interferencia 0.35s steps(2) 2; }
+@keyframes interferencia {
+  0%   { transform: translateX(0);    opacity: 1; }
+  25%  { transform: translateX(-3px); opacity: 0.6; }
+  50%  { transform: translateX(3px);  opacity: 1; }
+  75%  { transform: translateX(-1px); opacity: 0.7; }
+}
+
+/* La ficha: el fondo oscurece suave y cada bloque entra en cascada */
+dialog.ficha[open]::backdrop { animation: aparecer 0.3s ease-out; }
+dialog.ficha[open] > * {
+  animation: bloqueSube 0.4s ease-out backwards;
+  animation-delay: calc(0.15s + var(--j, 0) * 45ms);
+}
+@keyframes bloqueSube { from { opacity: 0; transform: translateY(8px); } }
+
+/* ---------- Botón de sonido ---------- */
+.sonido[aria-pressed="false"] .sonido__ondas { display: none; }
+.sonido[aria-pressed="true"] .sonido__mute { display: none; }
+
+/* ---------- Menos movimiento si la persona lo pidió ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .centro .detalle, .centro .detalle::before,
+  .landing.llegando .contenido,
+  .empleados .rejilla.entrando .empleado,
+  .empleado.empleado-tachado:hover .sello-restringido,
+  dialog.ficha[open] > *, dialog.ficha[open]::backdrop { animation: none; }
+  .empleado, .empleado .foto { transition: none; }
+}
